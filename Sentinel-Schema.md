@@ -17,8 +17,10 @@ sentinel에서 사용되는 모든 sheet엔 태깅 필수, 아래 총 4개의 sh
  	#end	 	 	 
  	 	 	 	 
 잘못된 예시
+
+
  	#start 	 	 	 
- 	 	 	 	 
+ 	
  	#version	#id	#format	 
  	14.02.11	T log sample	HM	 
  	#end 	 	 	 
@@ -39,11 +41,11 @@ sentinel에서 사용되는 모든 sheet엔 태깅 필수, 아래 총 4개의 sh
 ## \#dictionary
 key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작성, 아래 나열되는 모든 태그가 존재하여야 함
 #### 사용 태그 목록
-\#start 태그 : 시작 row 정의
-\#end 태그 : 종료 row 정의
-\#key 태그 : key 이름
-\#type 태그 : key type
-type 종류
+\#start 태그 : 시작 row 정의<br/>
+\#end 태그 : 종료 row 정의<br/>
+\#key 태그 : key 이름<br/>
+\#type 태그 : key type <br/>
+#### type 종류
 string : 가변길이 문자형
 fixed string(n) : 고정길이 문자형, ex)fixed string(10) : 10자리 문자형
 int : 정수형
