@@ -1,14 +1,14 @@
-Quick Guide
-HM log format을 sentinel이 읽을 수 있는 형태로 제작
-#{tagName} 방식의 태그로 표현
-예제- https://docs.google.com/spreadsheets/d/1c54C-emSKnz95MnZ4RE7phEKcZ6cTF_4zuzBWChtWKQ/edit?usp=sharing 
+# Quick Guide
+HM log format을 sentinel이 읽을 수 있는 형태로 제작<br/>
+\#{tagName} 방식의 태그로 표현<br/>
+예제- https://docs.google.com/spreadsheets/d/1c54C-emSKnz95MnZ4RE7phEKcZ6cTF_4zuzBWChtWKQ/edit?usp=sharing <br/>
 
-Sheet 정의
+## Sheet 정의
 sentinel에서 사용되는 모든 sheet엔 태깅 필수, 아래 총 4개의 sheet가 사용됨
-모든 sheet의 시작 row와(#start) 종료 row에(#end) 태깅이 필요함
-#start 태그 바로 다음 row부터 각 sheet의 컨텐츠가 존재해야 함
-#end 태그 바로 직전 row까지 각 sheet의 컨텐츠가 존재해야 함
-예시(#define)
+모든 sheet의 시작 row와(\#start) 종료 row에(\#end) 태깅이 필요함
+\#start 태그 바로 다음 row부터 각 sheet의 컨텐츠가 존재해야 함
+\#end 태그 바로 직전 row까지 각 sheet의 컨텐츠가 존재해야 함
+예시(\#define)
 올바른 예시
  	 	 	 	 
  	#start	 	 	 
@@ -23,26 +23,26 @@ sentinel에서 사용되는 모든 sheet엔 태깅 필수, 아래 총 4개의 sh
  	14.02.11	T log sample	HM	 
  	#end 	 	 	 
  	 	 	 	 
-#start 태그 바로 다음 row에 컨텐츠가 없음
-필수
-#define
-스키마 문서의 기본 정보 정의
-사용 태그 목록
-#start 태그 : 시작 row 정의
-#end 태그 : 종료 row 정의
-#version 태그 : 로그 버전 정의, 릴리즈 날짜형태(yy.mm.dd) 권장
-#id 태그 : 로그 서비스명 정의
-#format 태그 : "HM" (향후 확장성을 위한 태그)
+-> \#start 태그 바로 다음 row에 컨텐츠가 없음
 
-예시 
+## \#define
+스키마 문서의 기본 정보 정의<br/>
+#### 사용 태그 목록
+\#start 태그 : 시작 row 정의<br/>
+\#end 태그 : 종료 row 정의<br/>
+\#version 태그 : 로그 버전 정의, 릴리즈 날짜형태(yy.mm.dd) 권장<br/>
+\#id 태그 : 로그 서비스명 정의<br/>
+\#format 태그 : "HM" (향후 확장성을 위한 태그)<br/>
 
-#dictionary
+
+
+## \#dictionary
 key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작성, 아래 나열되는 모든 태그가 존재하여야 함
-사용 태그 목록
-#start 태그 : 시작 row 정의
-#end 태그 : 종료 row 정의
-#key 태그 : key 이름
-#type 태그 : key type
+#### 사용 태그 목록
+\#start 태그 : 시작 row 정의
+\#end 태그 : 종료 row 정의
+\#key 태그 : key 이름
+\#type 태그 : key type
 type 종류
 string : 가변길이 문자형
 fixed string(n) : 고정길이 문자형, ex)fixed string(10) : 10자리 문자형
@@ -56,9 +56,9 @@ map<type> : json object 형, body에서만 사용 가능, 아래 3가지 type �
 map<int> :  정수형 object,  ex){"a":10,"b":20,"c":30}
 map<float> : 실수형 object, ex){"a":1.1,"b":1.3,"c":1.5}
 map<string> :  문자형 object,  ex){"a":"q","b":"w","c":"e"}
-#description 태그 : key에 대한 설명
-#rule 태그 : key의 검증룰, groovy 문법 채용, 모든 rule이 정의되어야 함(not nullable)
-bypass시(룰 검증이 필요없는 경우) : #bypass 태그 입력
+\#description 태그 : key에 대한 설명
+\#rule 태그 : key의 검증룰, groovy 문법 채용, 모든 rule이 정의되어야 함(not nullable)
+bypass시(룰 검증이 필요없는 경우) : \#bypass 태그 입력
 UDF(user define function)
 dateformat : 시간관련 key 검증 
 필요 parameter
@@ -90,46 +90,45 @@ example
 result_message의 type이 map<string>이고 value가 {"a01":"succ","b02":"fail"}인 경우
 map(result_message){key,value -> key.length() >= 3 && value.length() > 0}
 map내의 모든 key의 길이가 3 이상, 모든 value가 0보다 커야 검증 통과
-#encryptionYN 태그 : key 저장시 암호화 여부, 암호화가 필요한 경우 Y 필요없으면 null
-#action_key 태그 : action을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 action key가 필요(optional)
-#version_key 태그 : log version을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 version key가 필요(필수)
+\#encryptionYN 태그 : key 저장시 암호화 여부, 암호화가 필요한 경우 Y 필요없으면 null
+\#action_key 태그 : action을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 action key가 필요(optional)
+\#version_key 태그 : log version을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 version key가 필요(필수)
 
 
-#layout
+## \#layout
 action별 key 적용 여부 작성
-#action 아래 action key로 사용할 key 조합 설정 가능(optional)
-#dictionary에서 정의한 #key 참조
+\#action 아래 action key로 사용할 key 조합 설정 가능(optional)
+\#dictionary에서 정의한 \#key 참조
 header는 모든 action에서 동일
 action별 header 존재 의미 
 header key값을 입력한 경우 : 해당 key의 rule로 검증하겠음
 비어있는 경우 : 해당 key를 사용하지 않겠음, 실제 로그엔 빈칸으로 기록되어야 함
-#bypass 태그를 입력한 경우 : 해당 key엔 어떤 값이 들어와도 상관없음. 룰 검증을 하지 않겠음
+\#bypass 태그를 입력한 경우 : 해당 key엔 어떤 값이 들어와도 상관없음. 룰 검증을 하지 않겠음
 header엔 list,map type은 사용 불가
 body는 action별로 사용될 key 나열
 server log schema 작성시 header의 첫번째 값은 log_time(YYYYMMDDHH*)을 사용(입수 시스템에서 partition 분할에 사용)
 사용 태그 목록
-#start 태그 : 시작 row 정의
-#end 태그 : 종료 row 정의
-#action 태그 : 액션명
-#header 태그 : header시작 지점 정의
-#body 태그 : body시작 지점 정의
+\#start 태그 : 시작 row 정의
+\#end 태그 : 종료 row 정의
+\#action 태그 : 액션명
+\#header 태그 : header시작 지점 정의
+\#body 태그 : body시작 지점 정의
 예시
 
 
- 
-선택
-#maplist
-1개(0~n개, deprecated)의 #maplist sheet가 존재할 수 있음
+## \#maplist
+1개(0~n개, deprecated)의 \#maplist sheet가 존재할 수 있음
 validation rule에서 사용되는 key-value data를 정의
 sheet name['key']으로 접근 가능(validation rule)
 사용 태그 목록
-#start 태그 : 시작 row 정의
-#end 태그 : 종료 row 정의
-#key 태그 : key, 중복가능
-#value 태그 : value, 동일 key에 대해서는 unique
-#description 태그 : value에 대한 설명 작성
+\#start 태그 : 시작 row 정의
+\#end 태그 : 종료 row 정의
+\#key 태그 : key, 중복가능
+\#value 태그 : value, 동일 key에 대해서는 unique
+\#description 태그 : value에 대한 설명 작성
 예시
 
  
-Sample 파일Edit
+## Sample 파일
 https://docs.google.com/spreadsheets/d/1c54C-emSKnz95MnZ4RE7phEKcZ6cTF_4zuzBWChtWKQ/edit?usp=sharing
+
