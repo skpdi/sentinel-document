@@ -2,7 +2,21 @@
 
 ![Image of GatherInfra](https://github.com/skpdi/sentinel-document/blob/master/infra/GatherInfra.png?raw=true)
 
-
+* RakeClient
+  * app / web 단말 로그 전송 library, **https request to RakeServer**
+* RakeServer
+  * RakeClient에서 전송된 로그를 받아 약간의 처리를 거쳐 kafka로 보냄, **kafka producer**
+* RakeAPI
+  * server 프로세스의 Logging에 사용하는 java library, **kafka producer**
+* LogAgent
+  * server 프로세스에서 떨어진 log file을 모니터링하여 전송하는 Tool, **kafka producer**
+* DBAgent
+  * service DB Snapshot 데이터를 hdfs로 전송하는 Tool
+* Collector
+  * kafka에 적재되어 있는 로그를 입수, **kafka consumer**
+  * 1 min: collector hdfs append flush 주기, client 에서 hdfs 적재되는데까지 걸리는 시간
+  
+  
 ### Header & Body Model
 
 * Header: 모든 로그에 공통으로 남길 데이터 field
