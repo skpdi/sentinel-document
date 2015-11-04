@@ -36,7 +36,7 @@
 ## \#define
 스키마 문서의 기본 정보 정의
 
-![Image of Define](schema/schema_define.png)
+![Image of Define](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_define.png?raw=true)
 
 #### 사용 태그 목록
 * **\#start 태그** : 시작 row 정의
@@ -50,7 +50,7 @@
 ## \#dictionary
 key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작성, 아래 나열되는 모든 태그가 존재하여야 함
 
-![Image of Dictionary](schema/schema_dic.png)
+![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_dic.png?raw=true)
 
 #### 사용 태그 목록
 * **\#start 태그** : 시작 row 정의
@@ -93,7 +93,7 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작�
 ## \#layout
 \#dictionary 에서 정의한 \#key를 활용해 header list 및 로그 종류별 body field 정의
 
-![Image of Dictionary](schema/schema_header_body.png)
+![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_header_body.png?raw=true)
 
 #### 로그 종류(action)에 대한 정의
 \#action 아래 action key로 사용할 key 정의<br/>
