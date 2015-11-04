@@ -126,7 +126,7 @@ server log schema 작성시 header의 첫번째 값은 log_time(YYYYMMDDHH*)을 
 validation rule에서 사용할 key-value data를 정의, code['key']으로 접근 가능<br/>
 MakeSentinel 시 key-value-description은 hive table로 export되어 다른 통계에 사용될 수 있음<br/>
 
-![Image of Dictionary](schema/schema_code_map_list.png)
+![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_code_map_list.png?raw=true)
 
 #### 사용 태그 목록
 * **\#start 태그** : 시작 row 정의
