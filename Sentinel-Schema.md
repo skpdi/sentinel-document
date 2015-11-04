@@ -36,6 +36,8 @@
 ## \#define
 스키마 문서의 기본 정보 정의
 
+![Image of Define](schema/schema_define.png)
+
 #### 사용 태그 목록
 * \#start 태그 : 시작 row 정의
 * \#end 태그 : 종료 row 정의
@@ -44,8 +46,12 @@
 * \#format 태그 : "HM" (향후 확장성을 위한 태그)
 
 
+
 ## \#dictionary
 key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작성, 아래 나열되는 모든 태그가 존재하여야 함
+
+![Image of Dictionary](schema/schema_dic.png)
+
 #### 사용 태그 목록
 * \#start 태그 : 시작 row 정의
 * \#end 태그 : 종료 row 정의
@@ -97,6 +103,8 @@ header엔 list,map type은 사용 불가
 body는 action별로 사용될 key 나열
 server log schema 작성시 header의 첫번째 값은 log_time(YYYYMMDDHH*)을 사용(입수 시스템에서 partition 분할에 사용)
 
+![Image of Dictionary](schema/schema_dic.png)
+
 #### 사용 태그 목록
 * \#start 태그 : 시작 row 정의
 * \#end 태그 : 종료 row 정의
@@ -104,12 +112,12 @@ server log schema 작성시 header의 첫번째 값은 log_time(YYYYMMDDHH*)을 
 * \#header 태그 : header시작 지점 정의
 * \#body 태그 : body시작 지점 정의
 
-예시
-
 
 ## code \#maplist
 validation rule에서 사용할 key-value data를 정의, code['key']으로 접근 가능<br/>
 MakeSentinel 시 key-value-description은 hive table로 export되어 다른 통계에 사용될 수 있음<br/>
+
+![Image of Dictionary](schema/schema_code_map_list.png)
 
 #### 사용 태그 목록
 * \#start 태그 : 시작 row 정의
@@ -119,6 +127,5 @@ MakeSentinel 시 key-value-description은 hive table로 export되어 다른 통�
 * \#description 태그 : value에 대한 설명 작성
 
 
-예시
 
 
