@@ -39,11 +39,11 @@
 ![Image of Define](schema/schema_define.png)
 
 #### 사용 태그 목록
-* \#start 태그 : 시작 row 정의
-* \#end 태그 : 종료 row 정의
-* \#version 태그 : 로그 버전 정의, 릴리즈 날짜형태(yy.mm.dd) 권장
-* \#id 태그 : 로그 서비스명 정의
-* \#format 태그 : "HM" (향후 확장성을 위한 태그)
+* **\#start 태그** : 시작 row 정의
+* **\#end 태그** : 종료 row 정의
+* **\#version 태그** : 로그 버전 정의, 릴리즈 날짜형태(yy.mm.dd) 권장
+* **\#id 태그** : 로그 서비스명 정의
+* **\#format 태그** : "HM" (향후 확장성을 위한 태그)
 
 
 
@@ -53,10 +53,10 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작�
 ![Image of Dictionary](schema/schema_dic.png)
 
 #### 사용 태그 목록
-* \#start 태그 : 시작 row 정의
-* \#end 태그 : 종료 row 정의
-* \#key 태그 : key 이름
-* \#type 태그 : key type 
+* **\#start 태그** : 시작 row 정의
+* **\#end 태그** : 종료 row 정의
+* **\#key 태그** : key 이름, human-readable하게 정의
+* **\#type 태그** : key type 
   * string : 가변길이 문자형
   * fixed string(n) : 고정길이 문자형, ex)fixed string(10) : 10자리 문자형
   * int : 정수형
@@ -69,48 +69,57 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작�
   * map<int> :  정수형 object,  ex){"a":10,"b":20,"c":30}
   * map<float> : 실수형 object, ex){"a":1.1,"b":1.3,"c":1.5}
   * map<string> :  문자형 object,  ex){"a":"q","b":"w","c":"e"}
-* \#description 태그 : key에 대한 설명
-* \#rule 태그 : key의 검증룰, groovy 문법 채용, 모든 rule이 정의되어야 함(not nullable)
+* **\#description 태그** : key에 대한 설명
+* **\#rule 태그** : key의 검증룰, groovy 문법 채용, 모든 rule이 정의되어야 함(not nullable)
   * bypass시(룰 검증이 필요없는 경우) : \#bypass 태그 입력
   * UDF(user define function)
-    1. dateformat(key, date_pattern) : 시간관련 key 검증 
+    1. *dateformat(key, date_pattern)* : 시간관련 key 검증 
       - example : dateformat(log_time, 'yyyyMMddHHmmssSSS')
-    2. regex(key, regular_expression) : 정규식 검증
+    2. *regex(key, regular_expression)* : 정규식 검증
       - example : regex(log_version, '[0-9]{2}\\.[0-9]{2}\\.[0-9]{2}')
-    3. list(key){value -> value 검증 룰} : list type 검증, list 내의 모든 value를 차례대로 검증
+    3. *list(key){value -> value 검증 룰}* : list type 검증, list 내의 모든 value를 차례대로 검증
       - example : list(product_price){value -> value >= 0}<br/>
         product_price의 type이 list<int>이고 value가 [10,20,30,40,50]인 경우<br/>
         list내의 모든 value가 0 이상이어야 검증 통과
-    4. map(key){key,value -> key,value에 대한 검증 룰} : map type 검증, map 내의 모든 key, value를 차례대로 검증
+    4. *map(key){key,value -> key,value에 대한 검증 룰}* : map type 검증, map 내의 모든 key, value를 차례대로 검증
       - example : map(result_message){key,value -> key.length() >= 3 && value.length() > 0}<br/>
         result_message의 type이 map<string>이고 value가 {"a01":"succ","b02":"fail"}인 경우<br/>
         map내의 모든 key의 길이가 3 이상, 모든 value가 0보다 커야 검증 통과<br/>
-* \#encryptionYN 태그 : key 저장시 암호화 여부, 암호화가 필요한 경우 Y 필요없으면 null
-* \#action_key 태그 : action을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 action key가 필요(optional)
-* \#version_key 태그 : log version을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 version key가 필요(필수)
+* **\#encryptionYN 태그** : key 저장시 암호화 여부, 암호화가 필요한 경우 Y 필요없으면 null
+* **\#action_key 태그** : action을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 action key가 필요(optional)
+* **\#version_key 태그** : log version을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 version key가 필요(필수)
 
 
 ## \#layout
-action별 key 적용 여부 작성
-\#action 아래 action key로 사용할 key 조합 설정 가능(optional)
-\#dictionary에서 정의한 \#key 참조
-header는 모든 action에서 동일
-action별 header 존재 의미 
-header key값을 입력한 경우 : 해당 key의 rule로 검증하겠음
-비어있는 경우 : 해당 key를 사용하지 않겠음, 실제 로그엔 빈칸으로 기록되어야 함
-\#bypass 태그를 입력한 경우 : 해당 key엔 어떤 값이 들어와도 상관없음. 룰 검증을 하지 않겠음
-header엔 list,map type은 사용 불가
-body는 action별로 사용될 key 나열
+\#dictionary 에서 정의한 \#key를 활용해 header list 및 로그 종류별 body field 정의
+
+![Image of Dictionary](schema/schema_header_body.png)
+
+#### 로그 종류(action)에 대한 정의
+\#action 아래 action key로 사용할 key 정의<br/>
+두 개의 key 조합 설정 가능 <br/>
+- example: page_id:action_id 
+
+#### Header List 정의
+header는 모든 action에서 동일하게 입수할 값<br/>
 server log schema 작성시 header의 첫번째 값은 log_time(YYYYMMDDHH*)을 사용(입수 시스템에서 partition 분할에 사용)
 
-![Image of Dictionary](schema/schema_dic.png)
+* action별 header 정의
+  - header key값을 입력한 경우 : 해당 key의 rule로 검증하겠음
+  - 비어있는 경우 : 해당 key를 사용하지 않겠음, 실제 로그엔 빈칸으로 기록되어야 함
+  - \#bypass 태그를 입력한 경우 : 해당 key엔 어떤 값이 들어와도 상관없음. 룰 검증을 하지 않겠음
+  - **header엔 list,map type의 \#key은 사용 불가**
+
+#### Body Field 정의
+로그 종류(action)별로 header list 외에 입수할 #key 나열
+
 
 #### 사용 태그 목록
-* \#start 태그 : 시작 row 정의
-* \#end 태그 : 종료 row 정의
-* \#action 태그 : 액션명
-* \#header 태그 : header시작 지점 정의
-* \#body 태그 : body시작 지점 정의
+* **\#start 태그** : 시작 row 정의
+* **\#end 태그** : 종료 row 정의
+* **\#action 태그** : 액션명
+* **\#header 태그** : header시작 지점 정의
+* **\#body 태그** : body시작 지점 정의
 
 
 ## code \#maplist
@@ -120,11 +129,11 @@ MakeSentinel 시 key-value-description은 hive table로 export되어 다른 통�
 ![Image of Dictionary](schema/schema_code_map_list.png)
 
 #### 사용 태그 목록
-* \#start 태그 : 시작 row 정의
-* \#end 태그 : 종료 row 정의
-* \#key 태그 : key, 중복가능
-* \#value 태그 : value, 동일 key에 대해서는 unique
-* \#description 태그 : value에 대한 설명 작성
+* **\#start 태그** : 시작 row 정의
+* **\#end 태그** : 종료 row 정의
+* **\#key 태그** : key, 중복가능
+* **\#value 태그** : value, 동일 key에 대해서는 unique
+* **\#description 태그** : value에 대한 설명 작성
 
 
 
