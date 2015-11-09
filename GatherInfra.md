@@ -1,6 +1,6 @@
 ### DIC 입수 Infra 구성
 
-![Image of GatherInfra](https://github.com/skpdi/sentinel-document/blob/master/infra/GatherInfra.png?raw=true)
+<img src="https://github.com/skpdi/sentinel-document/blob/master/infra/GatherInfra.png?raw=true" width="700">
 
 * RakeClient
   * app / web 단말 로그 전송 library, **https request to RakeServer**
