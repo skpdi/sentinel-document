@@ -4,12 +4,12 @@
 * [Sample DBSchema 파일](https://docs.google.com/spreadsheets/d/1f76XlYgiEApCe5DpzzwfWR55EN8X4whsd9YYQ2-IK78/edit?usp=sharing) 참고
 
 ##Quick Guide
-0. \#define 시트를 작성합니다.
-1. \#common 시트를 작성합니다.
-2. \#maplist 시트를 작성합니다.
-3. \#dummy 시트를 복사한 후, 시트의 이름을 {데이터 명} \#tbl 로 수정합니다.
-4. 추가한 \#tbl 시트를 작성합니다.
-5. 정의해야할 데이터 수만큼 3-4번을 반복합니다.
+1. \#define 시트를 작성합니다.
+2. \#common 시트를 작성합니다.
+3. \#maplist 시트를 작성합니다.
+4. \#dummy 시트를 복사한 후, 시트의 이름을 {데이터 명} \#tbl 로 수정합니다.
+5. 추가한 \#tbl 시트를 작성합니다.
+6. 정의해야할 데이터 수만큼 4-5번을 반복합니다.
 
 ## Block 정의
 * DBSchema의 모든 block은 태그를 기반으로 인식함
