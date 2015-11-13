@@ -161,11 +161,9 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작�
         * map(key){key,value -> key,value에 대한 검증 룰} : map type 검증, map 내의 모든 key, value를 차례대로 검증
             * example : map(result_message){key,value -> key.length() >= 3 && value.length() > 0}
             *  result_message의 type이 map이고 value가 {"a01":"succ","b02":"fail"}인 경우 map내의 모든 key의 길이가 3 이상, 모든 value가 0보다 커야 검증 통과
-* **\#encryptionYN 태그** : key 저장시 암호화 여부, 암호화가 필요한 경우 Y 필요없으면 빈칸
-* **\#origin_type 태그** : 원천 DB에서의 테이블 필드 타입
-* **\#pk 태그** : primary key 옵션
-* **\#not_null 태그** : not null 옵션
-* * **\#default_value 태그** : default value 옵션
-
-
-
+* **\#encryptionYN 태그** : 필드의 암호화 여부. 암호화가 필요한 경우만 Y
+* **\#origin_type 태그** : 원천 DB에서의 테이블 필드 타입. 테이블의 필드였던 경우만 기입
+* **\#pk 태그** : 테이블 스키마 primary key 여부. PK인 경우만 Y
+* **\#not_null 태그** : 테이블 스키마 not null 여부. not null인 경우만 Y
+* **\#default_value 태그** : 테이블 스키마 default value 값. default value 있는 경우만 기입
+* **\#version_key 태그** : 레코드의 버전. 즉, 레코드가 생성 / 수정된 날짜 정보. delta / incremental에서 사용. version_key인 경우만 기입
