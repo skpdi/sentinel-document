@@ -62,15 +62,15 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작�
   * int : 정수형
   * float : 실수형
   * list<type> : json list형, body에서만 사용 가능, 아래 3가지 type 이외의 type(list, object 등등)은 지원안함
-  * list<int> : 정수형 리스트, ex)[10,20,30]
-  * list<float> : 실수형 리스트, ex)[1.1,1.3,1.5]
-  * list<string> :  문자형 리스트,  ex)["a","b","c","d"]
+    * list<int> : 정수형 리스트, ex)[10,20,30]
+    * list<float> : 실수형 리스트, ex)[1.1,1.3,1.5]
+    * list<string> :  문자형 리스트,  ex)["a","b","c","d"]
   * map<type> : json object 형, body에서만 사용 가능, 아래 3가지 type 이외의 type(list, object 등등)은 지원안함
-  * map<int> :  정수형 object,  ex){"a":10,"b":20,"c":30}
-  * map<float> : 실수형 object, ex){"a":1.1,"b":1.3,"c":1.5}
-  * map<string> :  문자형 object,  ex){"a":"q","b":"w","c":"e"}
+    * map<int> :  정수형 object,  ex){"a":10,"b":20,"c":30}
+    * map<float> : 실수형 object, ex){"a":1.1,"b":1.3,"c":1.5}
+    * map<string> :  문자형 object,  ex){"a":"q","b":"w","c":"e"}
   * json : json, body에서만 사용 가능
-   * Body가 1depth 이기 때문에, 이 경우 2 depth 이상이 됩니다. json 의 depth가 2 이상인 값에 대해 암호화/검증기능을 지원하지 않습니다.
+    * Body가 1depth 이기 때문에, 이 경우 2 depth 이상이 됩니다. json 의 depth가 2 이상인 값에 대해 암호화/검증기능을 지원하지 않습니다.
 * **\#description 태그** : key에 대한 설명
 * **\#rule 태그** : key의 검증룰, groovy 문법 채용, 모든 rule이 정의되어야 함(not nullable)
   * bypass시(룰 검증이 필요없는 경우) : \#bypass 태그 입력
