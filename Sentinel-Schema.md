@@ -69,6 +69,8 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작�
   * map<int> :  정수형 object,  ex){"a":10,"b":20,"c":30}
   * map<float> : 실수형 object, ex){"a":1.1,"b":1.3,"c":1.5}
   * map<string> :  문자형 object,  ex){"a":"q","b":"w","c":"e"}
+  * json : json, body에서만 사용 가능
+   * Body가 1depth 이기 때문에, 이 경우 2 depth 이상이 됩니다. json 의 depth가 2 이상인 값에 대해 암호화/검증기능을 지원하지 않습니다.
 * **\#description 태그** : key에 대한 설명
 * **\#rule 태그** : key의 검증룰, groovy 문법 채용, 모든 rule이 정의되어야 함(not nullable)
   * bypass시(룰 검증이 필요없는 경우) : \#bypass 태그 입력
