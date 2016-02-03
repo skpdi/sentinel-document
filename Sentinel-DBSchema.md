@@ -129,7 +129,11 @@
     * delta: 변동분
     * full: 전체
 * **query**: 추출 SQL
-* **null\_string**:  null 값 표현 문자열. 대소문자 구분.
+* **null\_string**:  null 값 표현 문자열. 대소문자 구분
+* **database**: 테이블 데이터베이스
+* **table\_name**: 테이블 명
+* **hdfs**: 테이블 경로
+* **partition\_key**: 파티션 키
 * **data\_description**: 데이터 설명
 
 ### \#tbl 블록
@@ -141,7 +145,7 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작�
 * **\#start 태그** : 시작 row 정의
 * **\#end 태그** : 종료 row 정의
 * **\#key 태그** : 테이블 필드 이름 정의. Hive 네이밍 컨벤션룰대로 작성
-* **\#type 태그** : 테이블 필드 타입 정의. Hive 타입만 허용
+* **\#type 태그** : 테이블 필드 타입 정의. 
     - [Hive Data Types](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Types) 참고
 * **\#description 태그** : 테이블 필드 코멘트 정의
 * **\#rule 태그** : key의 검증룰, groovy 문법으로 자유롭게 작성, 모든 rule이 정의되어야 함(not nullable)
