@@ -1,9 +1,9 @@
-# Sentinel-Schema 설계문서 작성 manual
-* \#{tagName} 방식의 태그로 작성하여, Sentinel이 읽을 수 있는 형태로 제작
+# New Sentinel-Schema 설계문서 작성 manual
+* \#{tagName} 방식의 태그를 활용하여 작성, 프로그램이 읽을 수 있는 형태로 제작
 * [Sample Schema 파일](https://docs.google.com/spreadsheets/d/1c54C-emSKnz95MnZ4RE7phEKcZ6cTF_4zuzBWChtWKQ/edit?usp=sharing) 참고
 
 ## Sheet 정의
-* sentinel에서 사용되는 모든 sheet엔 태깅 필수, 아래 총 4개의 sheet가 사용됨
+* sentinel에서 사용되는 모든 sheet엔 태깅 필수, 아래 총 5개의 sheet가 사용됨
 * 모든 sheet의 시작 row와(\#start) 종료 row에(\#end) 태깅이 필요함
 * \#start 태그 바로 다음 row부터 각 sheet의 컨텐츠가 존재해야 함
 * \#end 태그 바로 직전 row까지 각 sheet의 컨텐츠가 존재해야 함
@@ -11,26 +11,25 @@
 #### 태그 예시(\#define)
 올바른 예시<br/>
 
-| | | | | |
-|-----|-----|-----|-----|-----|
-| | #start | | | |
-| |	#version	| #id	| #format |	| 
-| |	14.02.11	| T log sample |	HM	| |
-| |	#end |	| | |
-| | | | | |
+| | | | | | |
+|-----|-----|-----|-----|-----|-----|
+| | #start | | | | |
+| |	#version	| #id	| #format | #poc	| | 
+| |	14.02.11	| T log sample |	HM	| server | |
+| |	#end |	| | | |
+| | | | | | |
 
 잘못된 예시
 > \#start 태그 바로 다음 row에 컨텐츠가 없음
 
-| | | | | |
-|-----|-----|-----|-----|-----|
-| | #start | | | |
-| | &nbsp; | | | |
-| |	#version	| #id	| #format |	| 
-| |	14.02.11	| T log sample |	HM	| |
-| |	#end |	| | |
-| | | | | |
- 
+| | | | | | |
+|-----|-----|-----|-----|-----|-----|
+| | #start | | | | |
+| | &nbsp; | | | | |
+| |	#version	| #id	| #format | #poc	| | 
+| |	14.02.11	| T log sample |	HM	| server | |
+| |	#end |	| | | |
+| | | | | | |
 
 
 ## \#define
@@ -44,11 +43,18 @@
 * **\#version 태그** : 로그 버전 정의, 릴리즈 날짜형태(yy.mm.dd) 권장
 * **\#id 태그** : 로그 서비스명 정의
 * **\#format 태그** : "HM" (향후 확장성을 위한 태그)
+* **\#poc 태그** : Log 입수 poc 구분
+  * client: web/app 단말에서 rakeClient를 통해 전송되는 로그
+  * server: server에서 남겨지는 로그
+  * db-data: DB Schema (현재 미사용)
+
+## \#infra
+입수와 관련된 정보가 기록되는 시트, 상용 입수 이후에는 시트 잠금으로 관리자만 수정가능
 
 
 
 ## \#dictionary
-key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작성, 아래 나열되는 모든 태그가 존재하여야 함
+key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 모든 태그가 존재하여야 함
 
 ![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_dic.png?raw=true)
 
