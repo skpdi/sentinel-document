@@ -64,7 +64,6 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
 * **\#key 태그** : key 이름, human-readable하게 정의
 * **\#type 태그** : key type 
   * string : 가변길이 문자형
-  * fixed string(n) : 고정길이 문자형, ex)fixed string(10) : 10자리 문자형
   * int : 정수형
   * float : 실수형
   * list<type> : json list형, body에서만 사용 가능, 아래 3가지 type 이외의 type(list, object 등등)은 지원안함
@@ -76,37 +75,44 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
     * map<float> : 실수형 object, ex){"a":1.1,"b":1.3,"c":1.5}
     * map<string> :  문자형 object,  ex){"a":"q","b":"w","c":"e"}
   * json : json, body에서만 사용 가능
-    * Body가 1depth 이기 때문에, 이 경우 2 depth 이상이 됩니다. json 의 depth가 2 이상인 값에 대해 암호화/검증기능을 지원하지 않습니다.
+    * hive 및 검증기에서 json string으로 취급됩니다.
+* **\#length 태그** : 값의 length 에 관해 정의가능
+  * [fixed length]: 정확하게 일치
+  * [min]~[max]: 범위 지정 가능
+  * example: 2(일치), ~2(2이하), 2~(2이상), 1~2(1이상2이하)  
+* **\#nullableYN 태그** : 빈값을 허용하는 필드를 태그할 수 있다.
+  * Y: nullable인 경우, 빈값일때는 검증룰(#type,#length,#rule,..)을 적용하지 않고 통과 
 * **\#description 태그** : key에 대한 설명
-* **\#rule 태그** : key의 검증룰, groovy 문법 채용, 모든 rule이 정의되어야 함(not nullable)
-  * bypass시(룰 검증이 필요없는 경우) : \#bypass 태그 입력
+* **\#rule 태그** : key의 검증룰, 빈 값인 경우 검증하지 않음
   * UDF(user define function)
-    1. *dateformat(key, date_pattern)* : 시간관련 key 검증 
-      - example : dateformat(log_time, 'yyyyMMddHHmmssSSS')
-    2. *regex(key, regular_expression)* : 정규식 검증
-      - example : regex(log_version, '[0-9]{2}\\.[0-9]{2}\\.[0-9]{2}')
-    3. *list(key){value -> value 검증 룰}* : list type 검증, list 내의 모든 value를 차례대로 검증
-      - example : list(product_price){value -> value >= 0}<br/>
-        product_price의 type이 list<int>이고 value가 [10,20,30,40,50]인 경우<br/>
-        list내의 모든 value가 0 이상이어야 검증 통과
-    4. *map(key){key,value -> key,value에 대한 검증 룰}* : map type 검증, map 내의 모든 key, value를 차례대로 검증
-      - example : map(result_message){key,value -> key.length() >= 3 && value.length() > 0}<br/>
-        result_message의 type이 map<string>이고 value가 {"a01":"succ","b02":"fail"}인 경우<br/>
-        map내의 모든 key의 길이가 3 이상, 모든 value가 0보다 커야 검증 통과<br/>
-* **\#encryptionYN 태그** : key 저장시 암호화 여부, 암호화가 필요한 경우 Y 필요없으면 null
-* **\#action_key 태그** : action을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 action key가 필요(optional)
-* **\#version_key 태그** : log version을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 version key가 필요(필수)
-
+    1. **df(date_pattern)** : 시간관련 값 검증 
+      - example : df(yyyyMMddHHmmssSSS)
+    2. **code(key in codelist)** : #code 시트에 정의한 codemap 이내의 값 중 하나
+      - example : code(page_id)
+    3. **in(values with csv format)** : parameter 에 정의한 값 중 하나
+      - example : in(apple,google,amazon)
+    4. **regex(regular_expression)** : 정규식 검증 ([Java Pattern](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html))
+      - example : regex([0-9]{2}\\.[0-9]{2}\\.[0-9]{2})
+    5. Logical Syntax
+      - **and(rules with csv format)** : AND 조건
+      - **or(rules with csv format)** : OR 조건
+      - **if(condition, rule if true, rule if false)** : 조건 분기
+      - **<,<=,>,>=,=,<>** : equality
+      - **@FIELD_NAME** : 다른 필드값 참조
+      - example : transaction_id 필드의 #rule: if(@tech_type=ble,$nonempty,$empty)
+        - tech_type 필드의 값이 ble 일 경우, transaction_id 는 빈값이 아니어야 함 
+* **\#versionKey 태그** : log version을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 version key가 필요(필수)
+  * #infra 시트에 자동수집항목 필드에 정의할 경우, dictionary 에 지정할 수 없음
 
 ## \#layout
-\#dictionary 에서 정의한 \#key를 활용해 header list 및 로그 종류별 body field 정의
+\#dictionary 에서 정의한 \#key를 활용해 로그 종류별 body field 정의
 
 ![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_header_body.png?raw=true)
 
 #### 로그 종류(action)에 대한 정의
-\#action 아래 action key로 사용할 key 정의<br/>
-두 개의 key 조합 설정 가능 <br/>
-- example: page_id:action_id 
+\#logKey 아래 로그 종류를 구분할 key 나열<br/>
+두 개의 key 설정 가능 <br/>
+- example: 예제 그림 참조
 
 #### Header List 정의
 header는 모든 action에서 동일하게 입수할 값<br/>
@@ -119,20 +125,20 @@ server log schema 작성시 header의 첫번째 값은 log_time(YYYYMMDDHH*)을 
   - **header엔 list,map type의 \#key은 사용 불가**
 
 #### Body Field 정의
-로그 종류(action)별로 header list 외에 입수할 #key 나열
-
+로그 종류(action)별로 입수할 #key 나열, 순서와 공백은 무관
+* => 구분자를 이용해 특정액션에서만 특정 룰을 정의할 수 있음
 
 #### 사용 태그 목록
 * **\#start 태그** : 시작 row 정의
 * **\#end 태그** : 종료 row 정의
-* **\#action 태그** : 액션명
-* **\#header 태그** : header시작 지점 정의
+* **\#logKey 태그** : log 종류를 구분지을 필드를 정의
+* **\#incaseHeader 태그** : action별로 header 필드 검증룰을 따로 지정하고 싶을 경우 사용
 * **\#body 태그** : body시작 지점 정의
 
 
-## code \#maplist
-validation rule에서 사용할 key-value data를 정의, code['key']으로 접근 가능<br/>
-MakeSentinel 시 key-value-description은 hive table로 export되어 다른 통계에 사용될 수 있음<br/>
+## #code
+validation rule에서 사용할 key-value data를 정의, code(KEY)으로 접근 가능<br/>
+MakeSentinel 시 key-value-description 그대로 hive table로 export되어 다른 통계에 사용될 수 있음<br/>
 
 ![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_code_map_list.png?raw=true)
 
