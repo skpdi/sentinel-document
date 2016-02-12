@@ -81,7 +81,7 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
   * [min]~[max]: 범위 지정 가능
   * example: 2(일치), ~2(2이하), 2~(2이상), 1~2(1이상2이하)  
 * **\#nullableYN 태그** : 빈값을 허용하는 필드를 태그할 수 있다.
-  * Y: nullable인 경우, 빈값일때는 검증룰(#type,#length,#rule,..)을 적용하지 않고 통과 
+  * Y: nullable인 경우, 빈값일때는 검증룰(#type,#length,#rule,..)을 적용하지 않고 통과
 * **\#description 태그** : key에 대한 설명
 * **\#rule 태그** : key의 검증룰, 빈 값인 경우 검증하지 않음
   * UDF(user define function)
@@ -91,14 +91,14 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
       - example : code(page_id)
     3. **in(values with csv format)** : parameter 에 정의한 값 중 하나
       - example : in(apple,google,amazon)
-    4. **regex(regular_expression)** : 정규식 검증 ([Java Pattern](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html))
+    4. **regex(regular_expression)** : 정규식 검증 ([Java Pattern](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html), [Regex Tester on Web](https://regex101.com/))
       - example : regex([0-9]{2}\\.[0-9]{2}\\.[0-9]{2})
     5. Logical Syntax
       - **and(rules with csv format)** : AND 조건
       - **or(rules with csv format)** : OR 조건
       - **if(condition, rule if true, rule if false)** : 조건 분기
       - **<,<=,>,>=,=,<>** : equality
-      - **@FIELD_NAME** : 다른 필드값 참조
+      - **@FIELD_NAME** : 다른 필드값 참조, equality 만 적용가능
       - example : transaction_id 필드의 #rule: if(@tech_type=ble,$nonempty,$empty)
         - tech_type 필드의 값이 ble 일 경우, transaction_id 는 빈값이 아니어야 함 
 * **\#versionKey 태그** : log version을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 version key가 필요(필수)
