@@ -1,12 +1,32 @@
 # New Sentinel-Schema 설계문서 작성 manual
-* \#{tagName} 방식의 태그를 활용하여 작성, 프로그램이 읽을 수 있는 형태로 제작
-* [Sample Schema 파일](https://docs.google.com/spreadsheets/d/1c54C-emSKnz95MnZ4RE7phEKcZ6cTF_4zuzBWChtWKQ/edit?usp=sharing) 참고
+## Intro
+* Sentinel Schema에서, 로그로 남길 데이터를 정의합니다.
+* Header & Body format
+  * 로그의 확장성을 고려합니다.
+  * 로그를 남기는 상황별로 달라지는 데이터의 종류(body 필드)를 포용합니다.
+* SKP DIC Infra에서 제공하는 것들과 연계됩니다.
+  * RakeClient: App/Web 단말에서 단말 로그를 직접 전송합니다.
+   * 자동으로 수집되는 항목들이 있습니다. (base_time, recv_time, os_name, os_version, resolusion, ...)
+  * RakeAPI: 운영 Server 단에서 로그를 바로 전송합니다.
+  * Shuttle: 스키마와 연결되어 로그 값 입력을 실수없이 편리하게 할 수 있도록 합니다.
+  * 암호화: 암호화가 필요한 필드를 스키마에서 표시해두고 셔틀을 사용해 전송하면, DIC Infra에서 제공하는 암호화가 적용되어 적재됩니다.
+* 입수된 로그에 대해, 값에 대해 간단한 검증을 할 수 있습니다.
+  * 상황별로 정의한 body 필드가 모두 있는지
+  * 각 필드 값에 대해, 
+    * 정의한 type 대로 들어왔는지
+    * 정의한 length 범위 내의 값의 길이를 갖고 있는지
+    * not null 인 경우 빈값('' or JSON Null)이 아닌지
+    * 기타 검증기능(date format, regex, one of defined value set, ...)을 제공합니다. 
 
-## Sheet 정의
-* sentinel에서 사용되는 모든 sheet엔 태깅 필수, 아래 총 5개의 sheet가 사용됨
+
+## Sheet 작성 가이드
+* \#{tagName} 방식의 태그를 활용하여 작성, 프로그램이 읽을 수 있는 형태로 제작됩니다.
+* [Sample Schema 파일](https://docs.google.com/spreadsheets/d/1c54C-emSKnz95MnZ4RE7phEKcZ6cTF_4zuzBWChtWKQ/edit?usp=sharing) 참고
+* 모든 sheet마다 정해진 태그 입력이 필수입니다.
 * 모든 sheet의 시작 row와(\#start) 종료 row에(\#end) 태깅이 필요함
 * \#start 태그 바로 다음 row부터 각 sheet의 컨텐츠가 존재해야 함
 * \#end 태그 바로 직전 row까지 각 sheet의 컨텐츠가 존재해야 함
+* \#start, \#end 태그로 둘러쌓인 네모 블럭의 바깥 top/left/bottom 영역은 자유롭게 사용이 가능힙니다.
 
 #### 태그 예시(\#define)
 올바른 예시<br/>
@@ -32,7 +52,7 @@
 | | | | | | |
 
 
-## \#define
+## \#define 시트
 스키마 문서의 기본 정보 정의
 
 ![Image of Define](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_define.png?raw=true)
@@ -48,9 +68,24 @@
   * server: server에서 남겨지는 로그
   * db-data: DB Schema (현재 미사용)
 
-## \#infra
-입수와 관련된 정보가 기록되는 시트, 상용 입수 이후에는 시트 잠금으로 관리자만 수정가능
+## \#infra 시트
+입수와 관련된 정보가 기록되는 시트, 상용 입수 이후에는 시트 잠금으로 관리자만 수정가능합니다.
+* 암호화 필드 설정
+  * **\#start_encryptFields 태그** : 암호화 필드 블럭의 시작 row 정의
+  * **\#key 태그** : 암호화가 필요한 key 이름, #infra 시트나 #dictionary 시트에 정의된 필드의 key 값이어야 합니다.
+  * **\#end_encryptFields 태그** : 암호화 필드 블럭의 종료 row 정의
 
+* 자동수집 필드(System Header) 설정
+RakeClient 사용시, 자동으로 수집할 필드를 정의합니다. 
+(구버젼에서 전환된 경우 dictionary 에 그대로 정의되고 자동수집 기능은 정상적으로 동작합니다.)
+  * 신규 스키마 생성시 자동으로 필드리스트가 작성되어 있음
+  * 필드 삭제는 불가능
+  * 수집 플랫폼에 태깅이 된 경우 값을 입력하여도 자동수집값이 적용됩니다.
+   * client 프로젝트의 지원가능 플랫폼 - \#android, \#iphone, \#web
+   * server 프로젝트의 지원가능 플랫폼 - \#java
+  * **\#start_systemHeader 태그** : 자동수집 필드 블럭의 시작 row 정의
+  * 수집 플랫폼 태그 외 기타 태그는 아래 \#dictionary 시트와 동일합니다.
+  * **\#start_systemHeader 태그** : 자동수집 필드 블럭의 종료 row 정의
 
 
 ## \#dictionary
@@ -61,6 +96,12 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
 #### 사용 태그 목록
 * **\#start 태그** : 시작 row 정의
 * **\#end 태그** : 종료 row 정의
+* **\#fieldCategory 태그** : 필드 종류에 대한 정의
+  * header : 정의한 순서대로, hive column header 순서가 됨. 
+    * headerList 순서 : #infra 시트 #systemHeader 필드 > #dictionary 시트 header 필드 > 'body'
+    * example : #infra 시트의 systemHeader 필드 정의(A,B,C) > #dictionary 시트 header 필드(J, K) <br/>
+      > headerList: A B C J K body, 총 6개 column
+  * json_child: body 필드의 #type-json 필드 아래 이어서 작성가능
 * **\#key 태그** : key 이름, human-readable하게 정의
 * **\#type 태그** : key type 
   * string : 가변길이 문자형
