@@ -2,7 +2,9 @@
 ## Intro
 * Sentinel Schema에서, 로그로 남길 데이터를 정의합니다.
 * Header & Body format
-  * 로그의 확장성을 고려합니다.
+  * example: Header A,B,C 필드, body D 필드 <br/> A_value B_value C_value {'D':'D_value'} 
+  * tsv 로 구분된 header 와 json string 인 body로 구성
+  * 로그의 확장성을 고려합니다. 입수가 시작된 이후에도 body 에 자유롭게 필드추가가 가능합니다.
   * 로그를 남기는 상황별로 달라지는 데이터의 종류(body 필드)를 포용합니다.
 * SKP DIC Infra에서 제공하는 것들과 연계됩니다.
   * RakeClient: App/Web 단말에서 단말 로그를 직접 전송합니다.
@@ -81,30 +83,29 @@ RakeClient 사용시, 자동으로 수집할 필드를 정의합니다.
   * 신규 스키마 생성시 자동으로 필드리스트가 작성되어 있음
   * 필드 삭제는 불가능
   * 수집 플랫폼에 태깅이 된 경우 값을 입력하여도 자동수집값이 적용됩니다.
-   * client 프로젝트의 지원가능 플랫폼 - \#android, \#iphone, \#web
-   * server 프로젝트의 지원가능 플랫폼 - \#java
+   * client 프로젝트의 지원가능 플랫폼 - **\#android, \#iphone, \#web**
+   * server 프로젝트의 지원가능 플랫폼 - **\#java**
   * **\#start_systemHeader 태그** : 자동수집 필드 블럭의 시작 row 정의
   * 수집 플랫폼 태그 외 기타 태그는 아래 \#dictionary 시트와 동일합니다.
   * **\#start_systemHeader 태그** : 자동수집 필드 블럭의 종료 row 정의
 
 
-## \#dictionary
+## \#dictionary 시트
 key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 모든 태그가 존재하여야 함
 
 ![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_dic.png?raw=true)
 
 #### 사용 태그 목록
 * **\#start 태그** : 시작 row 정의
-* **\#end 태그** : 종료 row 정의
 * **\#fieldCategory 태그** : 필드 종류에 대한 정의
-  * header : 정의한 순서대로, hive column header 순서가 됨. 
-    * headerList 순서 : #infra 시트 #systemHeader 필드 > #dictionary 시트 header 필드 > 'body'
-    * example : #infra 시트의 systemHeader 필드 정의(A,B,C) > #dictionary 시트 header 필드(J, K) <br/>
-      > headerList: A B C J K body, 총 6개 column
-  * json_child: body 필드의 #type-json 필드 아래 이어서 작성가능
+  * header : 정의한 순서대로, hive column 순서가 됨. 
+    * hive column 순서 : #infra 시트 #systemHeader 필드 > #dictionary 시트 header 필드 > 'body'
+    * example : #infra 시트의 systemHeader 필드 정의(#key: A,B,C), #dictionary 시트 header 필드(#key: J, K) <br/>
+      hive column list : A B C J K body (총 6개 column)
+  * json_child: body 필드의 #type json body 필드 아래 이어서 작성가능(검증이 필요한 경우에만 작성)
 * **\#key 태그** : key 이름, human-readable하게 정의
-* **\#type 태그** : key type 
-  * string : 가변길이 문자형
+* **\#type 태그** : 필드 type 
+  * string : 문자형
   * int : 정수형
   * float : 실수형
   * list<type> : json list형, body에서만 사용 가능, 아래 3가지 type 이외의 type(list, object 등등)은 지원안함
@@ -123,15 +124,15 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
   * example: 2(일치), ~2(2이하), 2~(2이상), 1~2(1이상2이하)  
 * **\#nullableYN 태그** : 빈값을 허용하는 필드를 태그할 수 있다.
   * Y: nullable인 경우, 빈값일때는 검증룰(#type,#length,#rule,..)을 적용하지 않고 통과
-* **\#description 태그** : key에 대한 설명
+* **\#description 태그** : 필드에 대한 설명
 * **\#rule 태그** : key의 검증룰, 빈 값인 경우 검증하지 않음
   * UDF(user define function)
-    1. **df(date_pattern)** : 시간관련 값 검증 
-      - example : df(yyyyMMddHHmmssSSS)
-    2. **code(key in codelist)** : #code 시트에 정의한 codemap 이내의 값 중 하나
-      - example : code(page_id)
+    1. **df(date_pattern)** : 시간관련 값 검증 ([Java DateFormat](https://docs.oracle.com/javase/8/docs/api/java/text/SimpleDateFormat.html))
+      - example : df(yyyyMMddHHmmssSSS) 
+    2. **code(key in codelist)** : #code 시트에 정의한 code map 이내의 값 중 하나
+      - example : code(page_id) <br/> #code 시트에서 #key가 'page_id' 인 [#value] 들 중 하나의 값
     3. **in(values with csv format)** : parameter 에 정의한 값 중 하나
-      - example : in(apple,google,amazon)
+      - example : in(apple,google,amazon) <br/> 'apple', 'google', 'amazon' 중 하나의 값과 일치
     4. **regex(regular_expression)** : 정규식 검증 ([Java Pattern](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html), [Regex Tester on Web](https://regex101.com/))
       - example : regex([0-9]{2}\\.[0-9]{2}\\.[0-9]{2})
     5. Logical Syntax
@@ -144,51 +145,41 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
         - tech_type 필드의 값이 ble 일 경우, transaction_id 는 빈값이 아니어야 함 
 * **\#versionKey 태그** : log version을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 version key가 필요(필수)
   * #infra 시트에 자동수집항목 필드에 정의할 경우, dictionary 에 지정할 수 없음
+* **\#end 태그** : 종료 row 정의
 
-## \#layout
-\#dictionary 에서 정의한 \#key를 활용해 로그 종류별 body field 정의
-
+## \#layout 시트
+로그를 남기는 상황(로그 종류, action)별로 body 필드 리스트 정의
 ![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_header_body.png?raw=true)
+\#logKey, (#incaseHeader,) \#body 태그 열은 빈 열없이 붙여서 순서에 맞게 작성하여야 함
 
-#### 로그 종류(action)에 대한 정의
-\#logKey 아래 로그 종류를 구분할 key 나열<br/>
-두 개의 key 설정 가능 <br/>
-- example: 예제 그림 참조
-
-#### Header List 정의
-header는 모든 action에서 동일하게 입수할 값<br/>
-server log schema 작성시 header의 첫번째 값은 log_time(YYYYMMDDHH*)을 사용(입수 시스템에서 partition 분할에 사용)
-
-* action별 header 정의
-  - header key값을 입력한 경우 : 해당 key의 rule로 검증하겠음
-  - 비어있는 경우 : 해당 key를 사용하지 않겠음, 실제 로그엔 빈칸으로 기록되어야 함
-  - \#bypass 태그를 입력한 경우 : 해당 key엔 어떤 값이 들어와도 상관없음. 룰 검증을 하지 않겠음
-  - **header엔 list,map type의 \#key은 사용 불가**
-
-#### Body Field 정의
-로그 종류(action)별로 입수할 #key 나열, 순서와 공백은 무관
-* => 구분자를 이용해 특정액션에서만 특정 룰을 정의할 수 있음
 
 #### 사용 태그 목록
 * **\#start 태그** : 시작 row 정의
-* **\#end 태그** : 종료 row 정의
-* **\#logKey 태그** : log 종류를 구분지을 필드를 정의
-* **\#incaseHeader 태그** : action별로 header 필드 검증룰을 따로 지정하고 싶을 경우 사용
+* **\#logKey 태그** : 로그 종류를 구분할 필드 정의
+- example: 일반적인 client 프로젝트에서는 'page_id', 'action_id' 가 사용됨
+* **\#incaseHeader 태그 (optional)** : 로그 종류별로 header 필드 검증룰을 따로 지정 가능, 정의하지 않아도 됨
+  * \#infra systemHeader 와 \#dictionary 에서 header 로 정의된 필드만 사용 가능
+  * 특정 액션에만 다른 검증룰 지정 가능
+    * 빈 값일 경우, 각 시트에 정의한 일반 필드 #rule을 사용하여 검증
 * **\#body 태그** : body시작 지점 정의
+  * 로그 종류별로 입수할 #key 나열, 순서와 공백은 무관 
+  * \#dictionary에서 body로 정의된 필드만 허용, 정의된 것 이외의 필드가 들어오는 것은 확인하지 않음
+  * 로그 종류별로 body field에 다른 #rule을 적용하고 싶을 경우
+    * body_field( => [NEW RULE]) : () 부분을 추가로 작성
+* **\#end 태그** : 종료 row 정의
 
-
-## #code
-validation rule에서 사용할 key-value data를 정의, code(KEY)으로 접근 가능<br/>
+## #code 시트
+validation rule에서 사용할 key-value data를 정의, code([#key])으로 접근 가능<br/>
 MakeSentinel 시 key-value-description 그대로 hive table로 export되어 다른 통계에 사용될 수 있음<br/>
 
 ![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_code_map_list.png?raw=true)
 
 #### 사용 태그 목록
 * **\#start 태그** : 시작 row 정의
-* **\#end 태그** : 종료 row 정의
 * **\#key 태그** : key, 중복가능
 * **\#value 태그** : value, 동일 key에 대해서는 unique
 * **\#description 태그** : value에 대한 설명 작성
+* **\#end 태그** : 종료 row 정의
 
 
 
