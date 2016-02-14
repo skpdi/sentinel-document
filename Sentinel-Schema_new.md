@@ -23,7 +23,7 @@
 
 ## Sheet 작성 가이드
 * \#{tagName} 방식의 태그를 활용하여 작성, 프로그램이 읽을 수 있는 형태로 제작됩니다.
-* [Sample Schema 파일](https://docs.google.com/spreadsheets/d/1c54C-emSKnz95MnZ4RE7phEKcZ6cTF_4zuzBWChtWKQ/edit?usp=sharing) 참고
+* [Sample Schema 파일](https://docs.google.com/spreadsheets/d/15U63cA3-RLa2lxUW_stpKPYeyVv0zmjYuAvjaOwg9T8/edit?usp=sharing) 참고
 * 모든 sheet마다 정해진 태그 입력이 필수입니다.
 * 모든 sheet의 시작 row와(\#start) 종료 row에(\#end) 태깅이 필요함
 * \#start 태그 바로 다음 row부터 각 sheet의 컨텐츠가 존재해야 함
