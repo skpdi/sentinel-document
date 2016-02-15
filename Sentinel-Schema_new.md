@@ -54,6 +54,9 @@
 | | | | | | |
 
 
+
+
+
 ## \#define 시트
 스키마 문서의 기본 정보 정의
 
@@ -69,6 +72,10 @@
   * client: web/app 단말에서 rakeClient를 통해 전송되는 로그
   * server: server에서 남겨지는 로그
   * db-data: DB Schema (현재 미사용)
+
+
+
+
 
 ## \#infra 시트
 입수와 관련된 정보가 기록되는 시트, 상용 입수 이후에는 시트 잠금으로 관리자만 수정가능
@@ -91,6 +98,9 @@ RakeClient 사용시, 자동으로 수집할 필드를 정의합니다.
   * **\#start_systemHeader 태그** : 자동수집 필드 블럭의 시작 row 정의
   * 수집 플랫폼 태그 외 기타 태그는 아래 \#dictionary 시트와 동일합니다.
   * **\#start_systemHeader 태그** : 자동수집 필드 블럭의 종료 row 정의
+
+
+
 
 
 ## \#dictionary 시트
@@ -151,6 +161,10 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
 * **\#end 태그** : 종료 row 정의
 
 
+
+
+
+
 ## \#layout 시트
 로그를 남기는 상황(로그 종류, action)별로 body 필드 리스트 정의
 ![Image of Layout](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_v2_layout.png?raw=true)
@@ -166,11 +180,23 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
   * 특정 액션에만 다른 검증룰 지정 가능
     * 빈 값일 경우, 각 시트에 정의한 일반 필드 #rule을 사용하여 검증
 * **\#body 태그** : body시작 지점 정의
-  * 로그 종류별로 입수할 #key 나열, 순서와 공백은 무관 
+  * 로그 종류별로 입수할 #key 나열, **순서와 공백은 무관** 
   * \#dictionary에서 body로 정의된 필드만 허용, 정의된 것 이외의 필드가 들어오는 것은 확인하지 않음
   * 로그 종류별로 body field에 다른 #rule을 적용하고 싶을 경우
     * body_field( => [NEW RULE]) : () 부분을 추가로 작성
 * **\#end 태그** : 종료 row 정의
+
+#### body 작성 스타일 가이드
+* 두 방식 모두 스키마를 읽어오는 데는 차이가 없음(순서와 공백 무관)
+* 샘플 스키마 및 상단 이미지와 같이 왼쪽으로 모두 당겨 공백없이 작성
+  * :+1: body field 가 많아져도 경우 리스트를 바로 인식할 수 있음
+* 아래 이미지처럼 필드 별로 열을 맞춰 사용할 수 있음
+  * :+1: body 필드 별로 어디서 사용되는지 확인 가능
+
+![Image of Layout](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_v2_body_style.png?raw=true)
+
+
+
 
 ## #code 시트
 validation rule에서 사용할 key-value data를 정의, code([#key])으로 접근 가능<br/>
