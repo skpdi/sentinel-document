@@ -57,7 +57,7 @@
 ## \#define 시트
 스키마 문서의 기본 정보 정의
 
-![Image of Define](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_define.png?raw=true)
+<img src="https://github.com/skpdi/sentinel-document/blob/master/schema/schema_v2_define.png?raw=true" width="500">
 
 #### 사용 태그 목록
 * **\#start 태그** : 시작 row 정의
@@ -71,7 +71,10 @@
   * db-data: DB Schema (현재 미사용)
 
 ## \#infra 시트
-입수와 관련된 정보가 기록되는 시트, 상용 입수 이후에는 시트 잠금으로 관리자만 수정가능합니다.
+입수와 관련된 정보가 기록되는 시트, 상용 입수 이후에는 시트 잠금으로 관리자만 수정가능
+
+![Image of Infra](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_v2_infra.png?raw=true)
+
 * 암호화 필드 설정
   * **\#start_encryptFields 태그** : 암호화 필드 블럭의 시작 row 정의
   * **\#key 태그** : 암호화가 필요한 key 이름, #infra 시트나 #dictionary 시트에 정의된 필드의 key 값이어야 합니다.
@@ -93,7 +96,7 @@ RakeClient 사용시, 자동으로 수집할 필드를 정의합니다.
 ## \#dictionary 시트
 key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 모든 태그가 존재하여야 함
 
-![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_dic.png?raw=true)
+![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_v2_dictionary.png?raw=true)
 
 #### 사용 태그 목록
 * **\#start 태그** : 시작 row 정의
@@ -147,9 +150,10 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
   * #infra 시트에 자동수집항목 필드에 정의할 경우, dictionary 에 지정할 수 없음
 * **\#end 태그** : 종료 row 정의
 
+
 ## \#layout 시트
 로그를 남기는 상황(로그 종류, action)별로 body 필드 리스트 정의
-![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_header_body.png?raw=true)
+![Image of Layout](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_v2_layout.png?raw=true)
 \#logKey, (#incaseHeader,) \#body 태그 열은 빈 열없이 붙여서 순서에 맞게 작성하여야 함
 
 
@@ -172,7 +176,7 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
 validation rule에서 사용할 key-value data를 정의, code([#key])으로 접근 가능<br/>
 MakeSentinel 시 key-value-description 그대로 hive table로 export되어 다른 통계에 사용될 수 있음<br/>
 
-![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_code_map_list.png?raw=true)
+![Image of Code](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_v2_code.png?raw=true)
 
 #### 사용 태그 목록
 * **\#start 태그** : 시작 row 정의
