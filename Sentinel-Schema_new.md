@@ -2,17 +2,19 @@
 ## Intro
 * Sentinel Schema에서, 로그로 남길 데이터를 정의합니다.
 * Header & Body format
-  * example: Header A,B,C 필드, body D 필드 <br/> A_value B_value C_value {'D':'D_value'} 
+  * 로그를 남기는 상황별로 달라지는 데이터의 종류(body 필드)를 기술할 수 있습니다.  
+  * 입수가 시작된 이후에도 body 에 자유롭게 필드추가가 가능해 확장성이 좋습니다.
+    * 업데이트가 잦은 모바일 서비스 앱에 적합합니다. 
   * tsv 로 구분된 header 와 json string 인 body로 구성
-  * 로그의 확장성을 고려합니다. 입수가 시작된 이후에도 body 에 자유롭게 필드추가가 가능합니다.
-  * 로그를 남기는 상황별로 달라지는 데이터의 종류(body 필드)를 포용합니다.
+    * example: Header A,B,C 필드, body D 필드 <br/> A_value B_value C_value {'D':'D_value'} 
+
 * SKP DIC Infra에서 제공하는 것들과 연계됩니다.
-  * RakeClient: App/Web 단말에서 단말 로그를 직접 전송합니다.
+  * **RakeClient** : App/Web 단말에서 단말 로그를 직접 전송합니다.
    * 자동으로 수집되는 항목들이 있습니다. (base_time, recv_time, os_name, os_version, resolusion, ...)
-  * RakeAPI: 운영 Server 단에서 로그를 바로 전송합니다.
-  * Shuttle: 스키마와 연결되어 로그 값 입력을 실수없이 편리하게 할 수 있도록 합니다.
-  * 암호화: 암호화가 필요한 필드를 스키마에서 표시해두고 셔틀을 사용해 전송하면, DIC Infra에서 제공하는 암호화가 적용되어 적재됩니다.
-* 입수된 로그에 대해, 값에 대해 간단한 검증을 할 수 있습니다.
+  * **RakeAPI** : 운영 Server 단에서 로그를 바로 전송합니다.
+  * **Shuttle** : 스키마와 연결되어 로그 값 입력을 실수없이 편리하게 할 수 있도록 합니다.
+  * **암호화** : 암호화가 필요한 필드를 스키마에서 표시해두고 셔틀을 사용해 전송하면, DIC Infra에서 제공하는 암호화가 적용되어 적재됩니다.
+* 입수된 로그에 대해서 간단한 검증을 할 수 있습니다.
   * 상황별로 정의한 body 필드가 모두 있는지
   * 각 필드 값에 대해, 
     * 정의한 type 대로 들어왔는지
@@ -168,7 +170,8 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
 ## \#layout 시트
 로그를 남기는 상황(로그 종류, action)별로 body 필드 리스트 정의
 ![Image of Layout](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_v2_layout.png?raw=true)
-\#logKey, (#incaseHeader,) \#body 태그 열은 빈 열없이 붙여서 순서에 맞게 작성하여야 함
+
+<br/>\#logKey, (#incaseHeader,) \#body 태그 열은 빈 열없이 붙여서 순서에 맞게 작성하여야 함
 
 
 #### 사용 태그 목록
