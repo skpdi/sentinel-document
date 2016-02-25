@@ -117,7 +117,7 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
     * hive column 순서 : #infra 시트 #systemHeader 필드 > #dictionary 시트 header 필드 > 'body'
     * example : #infra 시트의 systemHeader 필드 정의(#key: A,B,C), #dictionary 시트 header 필드(#key: J, K) <br/>
       hive column list : A B C J K body (총 6개 column)
-  * json_child: body 필드의 #type json body 필드 아래 이어서 작성가능(검증이 필요한 경우에만 작성)
+  * json_child: body 필드의 #type json body 필드 아래 이어서 작성가능(검증이 필요한 경우에만 작성, 암호화 미지원(지원예정))
 * **\#key 태그** : key 이름, human-readable하게 정의
 * **\#type 태그** : 필드 type 
   * string : 문자형
