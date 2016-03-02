@@ -88,7 +88,6 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작�
         result_message의 type이 map<string>이고 value가 {"a01":"succ","b02":"fail"}인 경우<br/>
         map내의 모든 key의 길이가 3 이상, 모든 value가 0보다 커야 검증 통과<br/>
 * **\#encryptionYN 태그** : key 저장시 암호화 여부, 암호화가 필요한 경우 Y 필요없으면 null
-* **\#action_key 태그** : action을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 action key가 필요(optional)
 * **\#version_key 태그** : log version을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 version key가 필요(필수)
 
 
