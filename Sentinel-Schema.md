@@ -1,3 +1,6 @@
+# OUT-DATED
+[신규 스키마 바로가기](https://github.com/skpdi/sentinel-document/blob/master/Sentinel-Schema_new.md)
+
 # Sentinel-Schema 설계문서 작성 manual
 * \#{tagName} 방식의 태그로 작성하여, Sentinel이 읽을 수 있는 형태로 제작
 * [Sample Schema 파일](https://docs.google.com/spreadsheets/d/1c54C-emSKnz95MnZ4RE7phEKcZ6cTF_4zuzBWChtWKQ/edit?usp=sharing) 참고
