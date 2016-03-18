@@ -14,7 +14,8 @@
   * service DB Snapshot 데이터를 hdfs로 전송하는 Tool
 * Collector
   * kafka에 적재되어 있는 로그를 입수, **kafka consumer**
-  * 1 min: collector hdfs append flush 주기, client 에서 hdfs 적재되는데까지 걸리는 시간
+  * ~ 3 sec: 정상적인 경우, client 에서 hdfs 적재되는데까지 걸리는 시간
+  * ~ 1 min: collector hdfs append flush 주기, hive에서 조회가능한 시간
   
   
 ### Header & Body Model
