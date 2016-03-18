@@ -34,36 +34,36 @@
 ![Image of Define](https://github.com/skpdi/sentinel-document/blob/master/schema/db_schema_define.png?raw=true)
 
 #### 사용 태그 목록
-* **\#start\_define 태그** : 시작 row 정의
-* **\#end\_define 태그** : 종료 row 정의
+* **\#start\_define 태그** : 시작 row 표시
+* **\#end\_define 태그** : 종료 row 표시
 * **\#version 태그** : 문서 (데이터) 버전 정의, 릴리즈 날짜형태(yy.mm.dd)로 작성
 * **\#id 태그** : 버전별 서비스명 정의
-* **\#format 태그** : 문서 구조 정의
-	* "HM" (define, common, tbl, maplist 시트 포함, 기본 값)
+* **\#format 태그** : 미사용. '-'로 표기
 
 ## \#common 시트
-### \# extract, transform, load 블록
-문서에 정의된 테이블들의 공통 속성을 적습니다.
+### \#extract, transform, load 블록
+문서에 정의된 테이블들의 공통 속성을 적습니다. 
 
 ![Image of Common](https://github.com/skpdi/sentinel-document/blob/master/schema/db_schema_common.png?raw=true)
 
 #### 사용 태그 목록
-* **\#start\_common 태그** : 시작 row 정의
-* **\#end\_common 태그** : 종료 row 정의
+* **\#start\_common 태그** : 시작 행 정의
+* **\#end\_common 태그** : 종료 행 정의
 * **\#key 태그** : properties 키
 * **\#value 태그** : properties 값
 * **\#description 태그** : properties 코멘트
 
-#### properties 목록
-* **idc**: DB 서버 & dump 서버 IDC
-* **dbms\_type**: DBMS 타입
-* **jdbc\_url**: 데이터베이스 jdbc url
-* **dump\_server\_host**: 덤프 파일을 생성해서 전달할 경우, dump 서버 호스트
-* **dump\_server\_ip**: 덤프 파일을 생성해서 전달할 경우, dump 서버 IP
-* **dump\_home**: 덤프 파일을 생성해서 전달할 경우, dump 서버 내 경로
-* **system\_prefix**: 데이터베이스 별칭
+#### property 키 목록
+* **idc** : DB서버 IDC 위치 (커머스센터, 일산, 서초, 보라매, 성수)
+* **dbms\_type** : RDB 종류 (oracle, mysql, postgresql, mssql)
+* **jdbc\_url** : JDBC URL
+* **dump\_server_host** : 테이블 스냅샷 파일을 저장하는 서버의 host
+* **dump\_server\_ip** : 테이블 스냅샷 파일을 저장하는 서버의 ip
+* **dump\_home** : 테이블 스냅샷 파일 저장 경로
+* **system\_prefix** : 센티넬 프로젝트 명이자 테이블 접두어로 쓸 RDB 별칭
 
-## code \#maplist
+## \#maplist 시트
+### \#maplist 블록
 \#tbl의 \#rule에서 참고할 코드 테이블입니다.
 또한 hive table로 export되어 Galleon에서 사용할 수 있습니다. (구현중)
 
@@ -80,6 +80,9 @@
 \#tbl 시트를 편하게 만들기 위한 템플릿입니다. \#dummy 시트를 복사해서 \#tbl 시트를 만들어 사용하세요.
 
 ## \#tbl 시트
+이 문서의 핵심입니다. 
+#key, #description 은 반드시 작성해주십시오.
+
 ### \# extract, transform, load 블록
 
 ![Image of Property Block](https://github.com/skpdi/sentinel-document/blob/master/schema/db_schema_tbl_0.png?raw=true)
@@ -91,7 +94,7 @@
 * **\#value 태그** : properties 값
 * **\#description 태그** : properties 코멘트
 
-#### properties 목록
+#### property 키 목록
 * **dump\_location**: 덤프 파일을 생성해서 전달할 경우, 덤프 파일 적재 경로
 * **file\_name\_pattern**: 덤프 파일을 생성해서 전달할 경우, 파일 이름 패턴
 * **extract\_period**: 덤프 주기. cron expression 사용
@@ -120,19 +123,8 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작�
 * **\#type 태그** : 테이블 필드 타입 정의. 
     - [Hive Data Types](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+Types) 참고
 * **\#description 태그** : 테이블 필드 코멘트 정의
-* **\#rule 태그** : key의 검증룰, groovy 문법으로 자유롭게 작성, 모든 rule이 정의되어야 함(not nullable)
+* **\#rule 태그** : 현재 룰 변경 중
     * bypass시(검증 룰을 작성할 수 없는 경우): #bypass 태그 입력
-    * UDF(user define function)
-        * dateformat(key, date\_pattern): 시간관련 key 검증
-            * example : dateformat(log\_time, 'yyyyMMddHHmmssSSS')
-        * regex(key, regular\_expression): 정규식 검증
-            * example : regex(log\_version, '[0-9]{2}\.[0-9]{2}\.[0-9]{2}')
-        * list(key){value -> value 검증 룰}: list type 검증, list 내의 모든 value를 차례대로 검증
-            * example : list(product\_price){value -> value >= 0}
-            * product\_price의 type이 list이고 value가 [10,20,30,40,50]인 경우 list내의 모든 value가 0 이상이어야 검증 통과
-        * map(key){key,value -> key,value에 대한 검증 룰} : map type 검증, map 내의 모든 key, value를 차례대로 검증
-            * example : map(result\_message){key,value -> key.length() >= 3 && value.length() > 0}
-            *  result\_message의 type이 map이고 value가 {"a01":"succ","b02":"fail"}인 경우 map내의 모든 key의 길이가 3 이상, 모든 value가 0보다 커야 검증 통과
 * **\#encryptionYN 태그** : 필드의 암호화 여부. 암호화가 필요한 경우만 y
 * **\#origin\_type 태그** : 원천 DB에서의 테이블 필드 타입. 테이블의 필드였던 경우만 기입
 * **\#pk 태그** : 테이블 스키마 primary key 여부. PK인 경우만 y
