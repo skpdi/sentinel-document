@@ -1,5 +1,5 @@
 # DBSchema 작성 manual
-* DBSchema 1개는 DB 서버에서 단일 계정으로 추출할 수 있는 여러 개의 db-data 를 정의할 수 있습니다.
+* DBSchema 1개는 RDB에서 단일 계정으로 추출할 수 있는 여러 개의 db-data 를 정의할 수 있습니다.
     - db-data 1개는 테이블 스냅샷 인터페이스 1개를 의미합니다.
 * [Sample DBSchema 파일](https://docs.google.com/spreadsheets/d/1f76XlYgiEApCe5DpzzwfWR55EN8X4whsd9YYQ2-IK78/edit?usp=sharing) 참고
 
@@ -9,42 +9,16 @@
 3. \#maplist 시트를 작성합니다.
 4. \#dummy 시트를 복사한 후, 시트의 이름을 {데이터 명} \#tbl 로 수정합니다.
 5. 추가한 \#tbl 시트를 작성합니다.
-6. 정의해야할 데이터 수만큼 4-5번을 반복합니다.
+6. 정의해야할 db-data 수만큼 4-5번을 반복합니다.
 
 ## Block 정의
 * DBSchema의 모든 block은 태그를 기반으로 인식함
-    * 모든 block의 시작 행와(\#start\_\*) 종료 행에(\#end\_\*) 태깅이 필요함
+    * 행 지정: 모든 block의 시작 행와(\#start\_\*) 종료 행에(\#end\_\*) 태깅이 필요함
         * \#start\_\* 태그 바로 다음 행부터 각 블록의 컨텐츠가 존재해야 함
         * \#end\_\* 태그 바로 직전 행까지 각 블록의 컨텐츠가 존재해야 함
-    * 모든 block의 첫번째 row는 헤더 row로 각 블록에서 사용할 수 있는 태깅이 필요함
+    * 열 지정: 모든 block의 첫번째 row는 헤더 row로 각 블록에서 사용할 수 있는 태깅이 필요함
 
 #### 태그 예시
-잘못된 예시 1
-> \#start 태그 바로 다음 row에 헤더 row가 없음
-
-| | | | | |
-|-----|-----|-----|-----|-----|
-| | #start_define | | | |
-| | &nbsp; | | | |
-| | #version    | #id   | #format | |
-| | 14.02.11    | T log sample |    HM  | |
-| | #end_define |  | | |
-| | | | | |
-
-잘못된 예시 2
-> \#start 태그, \#end 태그 사이에 컨텐츠가 없음
-
-| | | | | |
-|-----|-----|-----|-----|-----|
-| | #start_define | | | |
-| | #version    | #id   | #format | |
-| | 14.02.11    | T log sample |    HM  | |
-| | &nbsp; | | | |
-| | #end_define |  | | |
-| | | | | |
-
-올바른 예시
-
 | | | | | |
 |-----|-----|-----|-----|-----|
 | | #start_define | | | |
@@ -104,8 +78,6 @@
 
 ## \#dummy 시트
 \#tbl 시트를 편하게 만들기 위한 템플릿입니다. \#dummy 시트를 복사해서 \#tbl 시트를 만들어 사용하세요.
-
-![Image of Dummy](https://github.com/skpdi/sentinel-document/blob/master/schema/db_schema_dummy.png?raw=true)
 
 ## \#tbl 시트
 ### \# extract, transform, load 블록
