@@ -123,14 +123,14 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
   * string : 문자형
   * int : 정수형
   * float : 실수형
-  * list<type> : json list형, body에서만 사용 가능, 아래 3가지 type 이외의 type(list, object 등등)은 지원안함
-    * list<int> : 정수형 리스트, ex)[10,20,30]
-    * list<float> : 실수형 리스트, ex)[1.1,1.3,1.5]
-    * list<string> :  문자형 리스트,  ex)["a","b","c","d"]
-  * map<type> : json object 형, body에서만 사용 가능, 아래 3가지 type 이외의 type(list, object 등등)은 지원안함
-    * map<int> :  정수형 object,  ex){"a":10,"b":20,"c":30}
-    * map<float> : 실수형 object, ex){"a":1.1,"b":1.3,"c":1.5}
-    * map<string> :  문자형 object,  ex){"a":"q","b":"w","c":"e"}
+  * list\<TYPE\> : json list형, body에서만 사용 가능, 아래 3가지 type 이외의 type(list, object 등등)은 지원안함
+    * list\<int\> : 정수형 리스트, ex)[10,20,30]
+    * list\<float\> : 실수형 리스트, ex)[1.1,1.3,1.5]
+    * list\<string\> :  문자형 리스트,  ex)["a","b","c","d"]
+  * map\<TYPE\> : json object 형, body에서만 사용 가능, 아래 3가지 type 이외의 type(list, object 등등)은 지원안함
+    * map\<int\> :  정수형 object,  ex){"a":10,"b":20,"c":30}
+    * map\<float\> : 실수형 object, ex){"a":1.1,"b":1.3,"c":1.5}
+    * map\<string\> :  문자형 object,  ex){"a":"q","b":"w","c":"e"}
   * json : json, body에서만 사용 가능
     * hive 및 검증기에서 json string으로 취급됩니다.
 * **\#length 태그** : 값의 length 에 관해 정의가능
