@@ -114,7 +114,7 @@
     - COMMA (,)
     - CONTROL_B (\002)
     - PIPE (|)
-    - CONTROL_A (\001)
+    - CONTROL_A (\001), 하이브 필드 구분자 기본값
 * **data\_description**: 데이터 설명
 
 ### \#tbl 블록
