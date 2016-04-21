@@ -110,11 +110,11 @@
 * **hdfs**: 테이블 경로
 * **partition\_key**: 파티션 키
 * **field\_delim**: 필드 구분자. 아래 값들만 사용 가능하다. 기본값은 tab
-    - tab (\t)
-    - comma (,)
-    - control_b (\002)
-    - pipe (|)
-    - control_a (\001)
+    - TAB (\t)
+    - COMMA (,)
+    - CONTROL_B (\002)
+    - PIPE (|)
+    - CONTROL_A (\001)
 * **data\_description**: 데이터 설명
 
 ### \#tbl 블록
