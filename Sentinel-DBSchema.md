@@ -99,22 +99,27 @@
 * **file\_name\_pattern**: 덤프 파일을 생성해서 전달할 경우, 파일 이름 패턴
 * **extract\_period**: 덤프 주기. cron expression 사용
     * [Cron Configuration](https://en.wikipedia.org/wiki/Cron) 참고
+    * [Oozie Cron Frequency] (http://oozie.apache.org/docs/4.1.0/CoordinatorFunctionalSpec.html) 참고
 * **extract_type**: 데이터 추출 유형
     * incremental: 증분
     * delta: 변동분
     * full: 전체
-* **query**: 추출 SQL
-* **null\_string**:  null 값 표현 문자열. 대소문자 구분
+* **jdbc_url**: Src RDB JDBC URL
+* **username**: Src RDB 접속 계정
+* **password\_file**: 
+* **src\_table**: 추출할 Src RDB 내 테이블 명
+* **where**: delta, incremental 추출용 where 절, where 나 query 둘 중 하나만 작성
+* **query**: delta, incremental 추출용 query, where 나 query 둘 중 하나만 작성
 * **database**: 테이블 데이터베이스
 * **table\_name**: 테이블 명
 * **hdfs**: 테이블 경로
 * **partition\_key**: 파티션 키
-* **field\_delim**: 필드 구분자. 아래 값들만 사용 가능하다. 기본값은 tab
-    - TAB (\t)
+* **field\_delim**: 필드 구분자. 아래 값들만 사용 가능하다. 기본값은 TAB
+    - TAB (\t), 센티넬 기본 필드 구분자
     - COMMA (,)
     - CONTROL_B (\002)
     - PIPE (|)
-    - CONTROL_A (\001), 하이브 필드 구분자 기본값
+    - CONTROL_A (\001), 하이브 기본 필드 구분자
 * **data\_description**: 데이터 설명
 
 ### \#tbl 블록
