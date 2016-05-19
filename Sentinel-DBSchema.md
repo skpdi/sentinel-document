@@ -24,6 +24,7 @@
 | | #start_define | | | |
 | | #version    | #id   | #format | |
 | | 14.02.11    | T log sample |    HM  | |
+| | 14.02.09    | T log sample |    HM  | |
 | | #end_define |  | | |
 | | | | | |
 
@@ -81,7 +82,7 @@
 
 ## \#tbl 시트
 이 문서의 핵심입니다. 
-#key, #description 은 반드시 작성해주십시오.
+\#key, \#description 은 반드시 작성해주십시오.
 
 ### \# extract, transform, load 블록
 
