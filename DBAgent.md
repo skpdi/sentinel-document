@@ -36,6 +36,13 @@
 * date 타입의 포멧은 ISO 8601 사용을 권장합니다.
 * null 값은 empty string ("")으로 치환해주십시오.
 
+## 파일 전달 가이드
+1. FTP 계정 접속 후 추출기준일자 디렉토리를 생성합니다.
+2. 디렉토리 안에 데이터 파일, 데이터별 체크 파일, 전체 전송 완료 체크 파일을 생성합니다.
+
+![Image of Directory](https://github.com/skpdi/sentinel-document/blob/master/schema/dbagent_directory.png?raw=true)
+![Image of Check File](https://github.com/skpdi/sentinel-document/blob/master/schema/dbagent_check_file.png?raw=true)
+
 ## 생성되는 테이블
 * DIC 클러스터 하이브에 생성되는 테이블은 기본적으로 
     - 인터페이스 정의서에 암호화 요청된 필드는 DIC 규격대로 암호화되어 적재됩니다. 복호화가 필요할 경우 [위키 가이드 페이지](http://wiki.skplanet.com/pages/viewpage.action?pageId=55452400)를 참고하세요.
