@@ -10,13 +10,23 @@
 * OGG를 사용하기 위해서 DB가 WAL 로그에 외부 싱크를 위한 정보를 추가로 남기는 옵션을 적용해야 합니다. 이 옵션을 최초 적용하려면 DB 서버 다운 타임이 발생합니다.
 
 ## 신청 절차
-1. 연동 요청자는 BM별로 DE팀 담당자와 컨택하여 연동해야할 원본 DB의 테이블을 지정합니다.
-2. 연동 방법이 OGG로 결정되면 연동될 분석 DB를 지정합니다.
-3. DE팀은 SE팀에 원본 DB, 분석 DB 간 OGG 연동을 요청합니다.
-4. SE팀은 OGG 를 사용해 연동 잡을 구축합니다.
-5. 연동 요청자는 [DI팀 JIRA 고객센터](http://jira.skplanet.com/servicedesk/customer/portal/49) 를 통해 신규 데이터 입수를 요청합니다. DI팀과 상의해 [센티넬](http://sentinel.skplanet.com:8080)에서 인터페이스 정의서를 작성할 프로젝트를 지정, 인터페이스 정의서를 (추가) 작성합니다.
+1. 프로젝트 생성
+    - 연동 요청자는 BM별로 DE팀 담당자와 컨택하여 연동해야할 원본 DB의 테이블을 지정합니다.
+    - 연동 요청자는 [DI팀 JIRA 고객센터](http://jira.skplanet.com/servicedesk/customer/portal/49) 를 통해 신규 데이터 입수를 요청합니다. DI팀과 상의해 [센티넬](http://sentinel.skplanet.com:8080)에서 인터페이스 정의서를 작성할 프로젝트를 지정합니다.
+        + 프로젝트 명칭
+        + Entity 정보 (P1, P2, P3)
+        + db-data 연동 방법
+        + Hive DB (적절한 DB가 없으면 신규 생성 [가이드](http://wiki.skplanet.com/pages/viewpage.action?pageId=63275727))
+2. db-data 정의
+    - 센티넬 프로젝트에 인터페이스 정의서를 (추가) 작성합니다.
     - [센티넬 프로젝트 작성 메뉴얼](http://sentinel.skplanet.com:8080/docs/dbschema)
-6. DI팀은 센티넬 프로젝트 내 인터페이스 정의서를 참고해 배치 잡을 등록합니다.
+3. 연동 준비
+    - 연동 방법이 OGG로 결정되면 연동 요청자와 DE팀은 연동될 분석 DB를 지정합니다.
+    - DE팀은 SE팀에 원본 DB, 분석 DB 간 OGG 연동을 요청합니다.
+    - SE팀은 OGG 를 사용해 연동 잡을 구축합니다.
+4. 입수 요청
+    - 추출 파일 생성 & 전달 후, JIRA에서 코멘트로 입수를 요청합니다.
+    - DI팀은 센티넬 프로젝트 내 인터페이스 정의서를 참고해 배치 잡을 등록합니다.
 
 ## 생성되는 테이블
 * DIC 클러스터 하이브에 생성되는 테이블은 기본적으로 

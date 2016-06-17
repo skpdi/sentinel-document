@@ -17,12 +17,23 @@
 * 추출에 문제가 있어 파일을 재추출해야할 때에는 DIC 클러스터에 전송된 파일을 먼저 삭제하도록 DI팀에 요청한 후 작업해야 합니다. (매우 불편합니다.) DI팀에서 조치해주지 않고 파일을 재생성하면 중복 레코드가 발생합니다.
 
 ### 신청 절차
-1. 연동 요청자는 BM별로 DE팀 담당자와 컨택하여 연동해야할 원본 DB의 테이블을 지정합니다.
-2. 연동 방법이 LogAgent로 결정되면 Landing 서버를 준비합니다.
-3. 연동 요청자는 [DI팀 JIRA 고객센터](http://jira.skplanet.com/servicedesk/customer/portal/49) 를 통해 신규 데이터 입수를 요청합니다. DI팀과 상의해 [센티넬](http://sentinel.skplanet.com:8080)에서 인터페이스 정의서를 작성할 프로젝트를 지정, 인터페이스 정의서를 (추가) 작성합니다.
-    * [센티넬 프로젝트 작성 메뉴얼](http://sentinel.skplanet.com:8080/docs/dbschema)
-4. 연동 요청자는 테이블 추출 앱을 개발 & 운영합니다.
-5. DI팀은 센티넬 프로젝트 내 인터페이스 정의서를 참고해 Landing 서버에 LogAgent 설치 및 데몬을 관리합니다.
+1. 프로젝트 생성
+    - 연동 요청자는 BM별로 DE팀 담당자와 컨택하여 연동해야할 원본 DB의 테이블을 지정합니다.
+    - 연동 요청자는 [DI팀 JIRA 고객센터](http://jira.skplanet.com/servicedesk/customer/portal/49) 를 통해 신규 데이터 입수를 요청합니다. DI팀과 상의해 [센티넬](http://sentinel.skplanet.com:8080)에서 인터페이스 정의서를 작성할 프로젝트를 지정합니다.
+        + 프로젝트 명칭
+        + Entity 정보 (P1, P2, P3)
+        + db-data 연동 방법
+        + Hive DB (적절한 DB가 없으면 신규 생성 [가이드](http://wiki.skplanet.com/pages/viewpage.action?pageId=63275727))
+2. db-data 정의
+    - 센티넬 프로젝트에 인터페이스 정의서를 (추가) 작성합니다.
+    - [센티넬 프로젝트 작성 메뉴얼](http://sentinel.skplanet.com:8080/docs/dbschema)
+3. 연동 준비
+    - 연동 방법이 LogAgent로 결정되면 연동 요청자는 Landing 서버를 준비합니다.
+    - 연동 요청자는 테이블 추출 앱을 개발 & 운영합니다.
+    - DI팀은 센티넬 프로젝트 내 인터페이스 정의서를 참고해 Landing 서버에 LogAgent 설치 및 데몬을 관리합니다.
+4. 입수 요청
+    - 추출 파일 생성 & 전달 후, JIRA에서 코멘트로 입수를 요청합니다.
+    - DI팀은 센티넬 프로젝트 내 인터페이스 정의서를 참고해 LogAgent를 시동합니다.
 
 ### 추출 파일 생성 가이드
 * 파일 명은 주기별로 생성되도록 아래 형태로 생성합니다.
