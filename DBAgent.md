@@ -38,7 +38,9 @@
 
 ## 파일 전달 가이드
 1. FTP 계정 접속 후 추출기준일자 디렉토리를 생성합니다.
-2. 디렉토리 안에 데이터 파일, 데이터별 체크 파일, 전체 전송 완료 체크 파일을 생성합니다.
+2. 디렉토리 안에 데이터 파일, 데이터별 체크 파일, 전체 전송 완료 체크 파일을 생성합니다. 체크 파일은 비어있는 터치 파일입니다.
+    - 데이터 체크 파일 형태: [DATA_ID]_[추출기준일자].chk
+    - 전체 전송 완료 체크 파일 형태: [추출기준일자].chk
 
 ![Image of Directory](https://github.com/skpdi/sentinel-document/blob/master/schema/dbagent_directory.png?raw=true)
 ![Image of Check File](https://github.com/skpdi/sentinel-document/blob/master/schema/dbagent_check_file.png?raw=true)
