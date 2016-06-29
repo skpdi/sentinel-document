@@ -97,38 +97,47 @@
 
 #### property 키 목록
 * **gather**: 
-    * OGG: 
-        * OGG (Oracle Golden Gate) 를 통해 ASDB, AS2DB 로 정보계 테이블 생성한 후 입수
-        * 운영계 테이블로부터 직접 입수 (Sqoop 사용)
-    * LGA: Landing 서버에 LogAgent를 설치해 파일을 입수
-    * RSV: 외부망의 Landing 서버에 LogAgent를 설치해 파일을 입수
-    * DBA: 172.22.212.92 서버에 생성된 파일을 입수
-* **dump\_location**: 덤프 파일을 생성해서 전달할 경우, 덤프 파일 적재 경로
-* **file\_name\_pattern**: 덤프 파일을 생성해서 전달할 경우, 파일 이름 패턴
-* **extract\_period**: 덤프 주기. cron expression 사용
-    * [Cron Configuration](https://en.wikipedia.org/wiki/Cron) 참고
-    * [Oozie Cron Frequency] (http://oozie.apache.org/docs/4.1.0/CoordinatorFunctionalSpec.html) 참고
-* **extract_type**: 데이터 추출 유형
-    * incremental: 증분
-    * delta: 변동분
-    * full: 전체
-* **jdbc_url**: Src RDB JDBC URL
-* **username**: Src RDB 접속 계정
-* **password\_file**: 
-* **src\_table**: 추출할 Src RDB 내 테이블 명
-* **where**: delta, incremental 추출용 where 절, where 나 query 둘 중 하나만 작성
-* **query**: delta, incremental 추출용 query, where 나 query 둘 중 하나만 작성
-* **database**: 테이블 데이터베이스
-* **table\_name**: 테이블 명
-* **hdfs**: 테이블 경로
-* **partition\_key**: 파티션 키
-* **field\_delim**: 필드 구분자. 아래 값들만 사용 가능하다. 기본값은 TAB
-    - TAB (\t), 센티넬 기본 필드 구분자
-    - COMMA (,)
-    - CONTROL_B (\002)
-    - PIPE (|)
-    - CONTROL_A (\001), 하이브 기본 필드 구분자
-* **data\_description**: 데이터 설명
+    - OGG (Ogg): 
+        + OGG 방식. Oracle Golden Gate를 사용해 ASDB, AS2DB 로 정보계 테이블 생성한 후 입수
+        + 운영계 테이블로부터 직접 입수
+    - LGA (LogAgent): Landing 서버에 LogAgent를 설치해 파일을 입수
+    - RSV (RakeServer): 외부망의 Landing 서버에 LogAgent를 설치해 파일을 입수
+    - DBA (DBAgent): 
+        + 172.22.212.92 서버에 생성된 파일을 입수
+        + 특정 Landing 서버에 생성된 파일을 FTP 접근해 입수 (Legacy로 더이상 사용하지 않음)
+* **OGG용 Property**
+    - **jdbc_url**: Src DB JDBC URL
+    - **username**: Src DB 접속 계정
+    - **password\_file**: Src DB 접속 패스워드가 담긴 파일 위치
+    - **src\_table**: 추출할 Src RDB 내 테이블 명
+    - **where**: delta, incremental 추출용 where 절, where 나 query 둘 중 하나만 작성
+    - **query**: delta, incremental 추출용 query, where 나 query 둘 중 하나만 작성
+    - **split_by**: query를 사용할 경우, query로 생성된 테이블의 pk 필드 명
+* **LogAgent용, RakeServer용 Property**
+    - **dump\_location**: 덤프 파일을 생성해서 전달할 경우, 덤프 파일 적재 경로
+    - **file\_name\_pattern**: 덤프 파일을 생성해서 전달할 경우, 파일 이름 패턴
+* **DBAgent용 Property**
+    - 
+
+* **공통 Property**
+    - **extract\_period**: 덤프 주기. cron expression 사용
+        + [Cron Configuration](https://en.wikipedia.org/wiki/Cron) 참고
+        + [Oozie Cron Frequency] (http://oozie.apache.org/docs/4.1.0/CoordinatorFunctionalSpec.html) 참고
+    - **extract_type**: 데이터 추출 유형
+        + incremental: 증분
+        + delta: 변동분
+        + full: 전체
+    - **database**: 테이블 데이터베이스
+    - **table\_name**: 테이블 명
+    - **hdfs**: 테이블 경로
+    - **partition\_key**: 파티션 키
+    - **field\_delim**: 필드 구분자. 아래 값들만 사용 가능하다. 기본값은 TAB
+        + TAB (\t), 센티넬 기본 필드 구분자
+        + COMMA (,)
+        + CONTROL_B (\002)
+        + PIPE (|)
+        + CONTROL_A (\001), 하이브 기본 필드 구분자
+    - **data\_description**: 데이터 설명
 
 ### \#tbl 블록
 key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작성합니다.
