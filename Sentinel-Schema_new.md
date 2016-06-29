@@ -8,8 +8,8 @@
   * 입수가 시작된 이후에도 body 에 자유롭게 필드추가가 가능해 확장성이 좋습니다.
     * 업데이트가 잦은 모바일 서비스 앱에 적합합니다. 
   * tsv 로 구분된 header 와 json string 인 body로 구성
-    * example: Header A,B,C 필드, body D 필드 <br/> A_value B_value C_value {'D':'D_value'} 
-    * Hive 에서 Body 필드 조회시 [get_json_object UDF](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF#LanguageManualUDF-get_json_object)를 사용하여 값을 가져올 수 있습니다.
+    * example: Header A,B,C 필드, body D 필드 <br/><pre> aValue bValue cValue {"D":"dValue"} </pre> 
+    * Hive 에서 Header 필드는 column으로, Body 필드는 Json String 으로 저장되어 조회시 [get_json_object UDF](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF#LanguageManualUDF-get_json_object)를 사용하여 값을 가져올 수 있습니다. <pre> select A, B, C, get_json_object(body, "$.D"") from TBNAME ... </pre>
 
 * SKP DIC Infra에서 제공하는 것들과 연계됩니다.
   * **RakeClient** : App/Web 단말에서 단말 로그를 직접 전송합니다.
