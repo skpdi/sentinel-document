@@ -96,6 +96,13 @@
 * **\#description 태그** : properties 코멘트
 
 #### property 키 목록
+* **gather**: 
+    * OGG: 
+        * OGG (Oracle Golden Gate) 를 통해 ASDB, AS2DB 로 정보계 테이블 생성한 후 입수
+        * 운영계 테이블로부터 직접 입수 (Sqoop 사용)
+    * LGA: Landing 서버에 LogAgent를 설치해 파일을 입수
+    * RSV: 외부망의 Landing 서버에 LogAgent를 설치해 파일을 입수
+    * DBA: 172.22.212.92 서버에 생성된 파일을 입수
 * **dump\_location**: 덤프 파일을 생성해서 전달할 경우, 덤프 파일 적재 경로
 * **file\_name\_pattern**: 덤프 파일을 생성해서 전달할 경우, 파일 이름 패턴
 * **extract\_period**: 덤프 주기. cron expression 사용
