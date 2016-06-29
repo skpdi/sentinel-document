@@ -1,13 +1,22 @@
 # New Sentinel-Schema 설계문서 작성 manual
 ## Intro
-* Sentinel Schema에서, 로그로 남길 데이터를 정의합니다.
+*   Sentinel Schema에서, 로그로 남길 데이터를 정의합니다.
 * Header & Body format
-  * 로그를 남기는 상황별로 달라지는 데이터의 종류(body 필드)를 기술할 수 있습니다.  
+  * **Header** : 모든 로그에 남는 정보(시간, device info, log version, ...) 
+  * **Body** : 로그를 남기는 상황별로 달라지는 데이터의 종류(body 필드)를 기술할 수 있습니다.
+    * user action, request/response, event triggered, ... 
   * 입수가 시작된 이후에도 body 에 자유롭게 필드추가가 가능해 확장성이 좋습니다.
-    * 업데이트가 잦은 모바일 서비스 앱에 적합합니다. 
+      * 업데이트가 잦은 모바일 서비스 앱에 적합합니다. 
+  * 예시: Header A,B,C 필드, body D 필드 <br/>
+    
+     | A | B | C | body |
+     |-----|-----|-----|-----|
+     | aValue | bValue | cValue | {"D":"dValue"} |
+      
   * tsv 로 구분된 header 와 json string 인 body로 구성
-    * example: Header A,B,C 필드, body D 필드 <br/> A_value B_value C_value {'D':'D_value'} 
-
+    * Hive 에서 Header 필드는 column으로, Body 필드는 Json String 으로 저장되어 조회시 [get_json_object UDF](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF#LanguageManualUDF-get_json_object)를 사용하여 값을 가져올 수 있습니다. 
+    <pre> select A, B, C, get_json_object(body, "$.D"") from TBNAME ... </pre>    
+  
 * SKP DIC Infra에서 제공하는 것들과 연계됩니다.
   * **RakeClient** : App/Web 단말에서 단말 로그를 직접 전송합니다.
    * 자동으로 수집되는 항목들이 있습니다. (base_time, recv_time, os_name, os_version, resolusion, ...)
@@ -21,6 +30,21 @@
     * 정의한 length 범위 내의 값의 길이를 갖고 있는지
     * not null 인 경우 빈값('' or JSON Null)이 아닌지
     * 기타 검증기능(date format, regex, one of defined value set, ...)을 제공합니다. 
+
+
+## 필드 종류 및 Hive column 이해
+* #infra 시트 #systemHeader 필드
+  * 모든 서비스 로그(SKP 모든 서비스)에서 공통적으로 수집하는 필드
+  * log_time, log_version, (Client Project) device_id, device_model, resolution, ...
+* #dictionary 시트의 header 필드
+  * 특정 서비스 로그(syrup, gifticon, ...)에서 공통적으로 수집하는 필드
+  * channel(로그입수 PoC), page_id, action_id, ... 
+* #dictionary 시트의 body 필드
+  * 특정 서비스 로그에서 상황에 따라 다르게 수집하는 필드
+  * display_order, status_code, request_param, ...
+* Hive column 순서 : #infra 시트 #systemHeader 필드 작성 순서 > #dictionary 시트 header 필드 작성 순서 > 'body' column
+* example : #infra 시트의 systemHeader 필드 정의(#key: A,B,C), #dictionary 시트 header 필드정의(#key: J, K) <br/>
+      hive column list : A B C J K body (총 6개 column)
 
 
 ## Sheet 작성 가이드
@@ -102,9 +126,6 @@ RakeClient 사용시, 자동으로 수집할 필드를 정의합니다.
   * **\#start_systemHeader 태그** : 자동수집 필드 블럭의 종료 row 정의
 
 
-
-
-
 ## \#dictionary 시트
 key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 모든 태그가 존재하여야 함
 
@@ -114,9 +135,7 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
 * **\#start 태그** : 시작 row 정의
 * **\#fieldCategory 태그** : 필드 종류에 대한 정의
   * header : 정의한 순서대로, hive column 순서가 됨. 
-    * hive column 순서 : #infra 시트 #systemHeader 필드 > #dictionary 시트 header 필드 > 'body'
-    * example : #infra 시트의 systemHeader 필드 정의(#key: A,B,C), #dictionary 시트 header 필드(#key: J, K) <br/>
-      hive column list : A B C J K body (총 6개 column)
+  * body : header 이후 작성, body 필드에 사용할 필드 정의
   * json_child: body 필드의 #type json body 필드 아래 이어서 작성가능(검증이 필요한 경우에만 작성, 암호화 미지원(지원예정))
 * **\#key 태그** : key 이름, human-readable하게 정의
 * **\#type 태그** : 필드 type 
@@ -202,10 +221,12 @@ key 목록 정의, key 이름, 타입, 설명, 검증rule, 아래 나열되는 �
 
 
 ## #code 시트
-validation rule에서 사용할 key-value data를 정의, code([#key])으로 접근 가능<br/>
-MakeSentinel 시 key-value-description 그대로 hive table로 export되어 다른 통계에 사용될 수 있음<br/>
+꼭 작성할 필요는 없으며, validation rule에서 code([#key]) 로 접근 가능<br/>
+MakeSentinel 시 key-value-description 그대로 hive table로 export되어 다른 통계에 활용될 수 있음<br/>
 
 ![Image of Code](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_v2_code.png?raw=true)
+
+ex) A필드의 rule 이 code(auth_type) 인 경우, A 필드가 (ipin, mobile, idpw) 중 하나의 값인지 QA 과정에서 확인가능
 
 #### 사용 태그 목록
 * **\#start 태그** : 시작 row 정의
