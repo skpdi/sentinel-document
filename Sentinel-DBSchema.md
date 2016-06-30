@@ -96,6 +96,10 @@
 * **\#description 태그** : properties 코멘트
 
 #### property 키 목록
+입수에 필요한 메타 정보를 저장하는 부분입니다.
+extract, transform, load로 나누어져 있으나 무의미해서 통합 예정이며, 세 블록 중 아무 곳에나 있어도 동일하게 취급됩니다.
+gather (입수 형태) 별로 필요한 property가 다르므로 아래를 참고해주세요.
+
 * **공통 Property**
     - **gather**: 
         + OGG (Ogg): 
