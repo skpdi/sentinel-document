@@ -2,7 +2,10 @@
 
 Shuttle 은 로그의 포맷을 담당합니다. 정의된 로그의 설계도 대로, 기록해야 하는 컬럼을 Setter 메소드를 이용해서 편리하게 남길 수 있습니다.
 
-Shuttle 은 [센티넬 홈페이지](http://sentinel.skplanet.co.kr:8080/) 에서 다운받을 수 있습니다. (프로젝트에서 구글시트로 스키마 작성 후 **Make Sentinel** 버튼을 클릭하여 생성된 Shuttle 을 다운받아 사용)
+Shuttle 은 [센티넬 홈페이지](http://sentinel.skplanet.co.kr:8080/) 에서 다운받을 수 있습니다. 
+- 센티넬 프로젝트 구글시트 스키마 작성 후 
+- Sentinel 프로젝트 페이지에서 **Make Sentinel** 버튼을 클릭하여 생성된 Shuttle 을 다운받아 사용
+- Release 체크박스 해제 후에야 다운 버튼이 나타남
 
 Shuttle 은 포맷을 담당하고, 전송을 위해서는 Rake 를 사용해야 합니다. Rake 관련해서는 [Rake API Document](https://github.com/skpdi/rake-document/wiki) 를 참조해주세요.
 
