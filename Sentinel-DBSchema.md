@@ -57,11 +57,10 @@
 #### property 키 목록
 * **idc** : DB서버 IDC 위치 (커머스센터, 일산, 서초, 보라매, 성수)
 * **dbms\_type** : RDB 종류 (oracle, mysql, postgresql, mssql)
-* **jdbc\_url** : JDBC URL
-* **dump\_server_host** : 테이블 스냅샷 파일을 저장하는 서버의 host
-* **dump\_server\_ip** : 테이블 스냅샷 파일을 저장하는 서버의 ip
-* **dump\_home** : 테이블 스냅샷 파일 저장 경로
 * **system\_prefix** : 센티넬 프로젝트 명이자 테이블 접두어로 쓸 RDB 별칭
+* **LogAgent용, RakeServer용, DBAgent용 Property**
+    - **dump\_server_host** : 테이블 스냅샷 파일을 저장하는 서버의 host
+    - **dump\_server\_ip** : 테이블 스냅샷 파일을 저장하는 서버의 ip
 
 ## \#maplist 시트
 ### \#maplist 블록
@@ -137,10 +136,7 @@ gather (입수 형태) 별로 필요한 property가 다르므로 아래를 참�
     - **where**: delta, incremental 추출용 where 절, where 나 query 둘 중 하나만 작성
     - **query**: delta, incremental 추출용 query, where 나 query 둘 중 하나만 작성
     - **split_by**: query를 사용할 경우, query로 생성된 테이블의 pk 필드 명
-* **LogAgent용, RakeServer용 Property**
-    - **dump\_location**: 덤프 파일을 생성해서 전달할 경우, 덤프 파일 적재 경로
-    - **file\_name\_pattern**: 덤프 파일을 생성해서 전달할 경우, 파일 이름 패턴
-* **DBAgent용 Property**
+* **LogAgent용, RakeServer용, DBAgent용 Property**
     - **dump\_location**: 덤프 파일을 생성해서 전달할 경우, 덤프 파일 적재 경로
     - **file\_name\_pattern**: 덤프 파일을 생성해서 전달할 경우, 파일 이름 패턴
 
