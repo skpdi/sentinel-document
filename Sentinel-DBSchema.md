@@ -117,6 +117,7 @@ gather (입수 형태) 별로 필요한 property가 다르므로 아래를 참�
         + incremental: 증분
         + delta: 변동분
         + full: 전체
+    - **is\_dev**: 개발 테이블 여부
     - **database**: 테이블 데이터베이스
     - **table\_name**: 테이블 명
     - **hdfs**: 테이블 경로
