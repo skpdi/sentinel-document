@@ -53,6 +53,8 @@
     - logagent 계정 홈디렉토리에 logagent 최신버전 설치 요청
     - 랜딩서버에 /etc/hosts 호스트 등록 요청
 
+[ITSM 신청 예제](http://itsm.skplanet.com/browse/TEMP-7918)
+
 상용존 랜딩 서버 => 상용 브로커 설정시
 ~~~~
 172.22.212.21   DICc-broker01-172.cm.skp
