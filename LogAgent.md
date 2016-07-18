@@ -29,8 +29,33 @@
     - [센티넬 프로젝트 작성 메뉴얼](http://sentinel.skplanet.com:8080/docs/dbschema)
 3. 연동 준비
     - 연동 방법이 LogAgent로 결정되면 연동 요청자는 Landing 서버를 준비합니다.
-    - 연동 요청자는 테이블 추출 앱을 개발 & 운영합니다.
-    - DI팀은 센티넬 프로젝트 내 인터페이스 정의서를 참고해 Landing 서버에 LogAgent 설치 및 데몬을 관리합니다.
+    - 연동 요청자는 테이블로부터 스냅샷 파일을 추출하는 어플리케이션을 (사용 or 개발) & 운영합니다.
+    - 연동 요청자는 아래와 같이 LogAgent 설치를 ITSM, 보안포털을 통해 진행합니다.
+        + ITSM에서 
+            + logagent 계정 생성, logagent 계정 dump location 접근 권한 확인, logagent package 설치 요청
+            + 호스트 등록 요청
+상용존 랜딩 서버 => 상용 브로커 설정시
+~~~~
+172.22.212.21   DICc-broker01-172.cm.skp
+172.22.212.22   DICc-broker02-172.cm.skp
+172.22.212.23   DICc-broker03-172.cm.skp
+172.22.212.24   DICc-broker04-172.cm.skp
+172.22.212.25   DICc-broker05-172.cm.skp
+172.22.212.26   DICc-broker06-172.cm.skp
+172.22.212.27   DICc-broker07-172.cm.skp
+172.22.212.28   DICc-broker08-172.cm.skp
+172.22.212.29   DICc-broker09-172.cm.skp
+172.22.212.30   DICc-broker10-172.cm.skp
+~~~~
+개발존 랜딩 서버 => 개발 브로커 설정시
+~~~~
+172.21.0.101    dici-devbroker01.is.skp
+172.21.0.102    dici-devbroker02.is.skp
+172.21.0.103    dici-devbroker03.is.skp
+172.21.0.104    dici-devbroker04.is.skp
+172.21.0.105    dici-devbroker05.is.skp
+~~~~
+    - DI팀은 센티넬 프로젝트 내 인터페이스 정의서를 참고해 LogAgent 설정을 세팅합니다.
 4. 입수 요청
     - 추출 파일 생성 & 전달 후, JIRA에서 코멘트로 입수를 요청합니다.
     - DI팀은 센티넬 프로젝트 내 인터페이스 정의서를 참고해 LogAgent를 시동합니다.
