@@ -8,7 +8,7 @@
 # 테이블정의서
 * 테이블 정의서는 적재되는 로그를 담기위한 형식을 지정합니다
 * 아래는 테이블 정의서의 예제 입니다
-![Image of Dictionary]![Image of Infra](https://github.com/skpdi/sentinel-document/blob/master/schema/table_definition.png?raw=true)
+![Image of Dictionary](/Users/1002585/Desktop/table.png)
 * Header & Body 모델
  * Header는 모든 로그에 남는 정보를 기입합니다
  * Body는 로그의 문맥에 따라 달라지는 데이터의 종류를 기술 합니다
@@ -38,21 +38,22 @@
  * function - Javascript 함수를 사용하여 검증합니다. 개발자가 사용합니다
 
 # 배치정의서
-* 테이블정의서에서 선틱된 로그키를 이용하여 로그의 문맥에 따라 남게될 Body를 기술합니다
-| | | | | | |
-|-----|-----|-----|-----|-----|---------|----------|----------|
-| page_id | action_id | | | | |
-| /search_product | search_btn_touch | query | sort_by | page_num | per_page |
+* 테이블정의서에서 선틱된 로그키를 이용하여 로그의 문맥에 따라 남게될 Body를 기술합니다<br />
+
+ | page_id | action_id | | | | |
+ |-----|-----|-----|-----|-----|---------|----------|----------|
+ | /search_product | search_btn_touch | query | sort_by | page_num | per_page |
 
 * /search\_product 페이지의 search\_btn\_touch 액션을 했을때 검색어, 정렬옵션, 페이지번호, 한페이지당 보여지는 아이템수가 필요하다는 것을 알 수 있습니다
 
 # 코드정의서
 * key, value, description 으로 정의합니다
-* 주로 배치정의서에서 page\_id, action\_id 의 내용이 정상적으로 입력되었는지 검증하기위해 사용됩니다
-| | | |
-|-----|-------|-------------|
-| key | value | description |
-| page_id | /search_product | 상품검색 페이지 |
-| action_id | search_btn_click | 상품 검색 아이콘 클릭 |
+* 주로 배치정의서에서 page\_id, action\_id 의 내용이 정상적으로 입력되었는지 검증하기위해 사용됩니다<br />
+
+ | key | value | description |
+ |-----|-------|-------------|
+ | page_id | /search_product | 상품검색 페이지 |
+ | action_id | search_btn_click | 상품 검색 아이콘 클릭 |
+
 * 예를 들어 위와같이 정의 했을 때 배치정의서는 action_id 에 search_btn_touch 로 정의했지만 코드정의서에는 search_btn_click 으로 정의 되었기 때문에 검증단계에서 오류가 발견됩니다.
 
