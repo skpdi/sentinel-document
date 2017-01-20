@@ -41,8 +41,9 @@
 * 테이블정의서에서 선틱된 로그키를 이용하여 로그의 문맥에 따라 남게될 Body를 기술합니다<br />
 
  | page_id | action_id | | | | |
- |-----|-----|-----|-----|-----|---------|----------|----------|
- | /search_product | search_btn_touch | query | sort_by | page_num | per_page |
+ |---------|-----------|-|-|-|-|-|-|
+ | search_product | search_btn_touch | query | sort_by | page_num | per_page |
+
 
 * /search\_product 페이지의 search\_btn\_touch 액션을 했을때 검색어, 정렬옵션, 페이지번호, 한페이지당 보여지는 아이템수가 필요하다는 것을 알 수 있습니다
 
