@@ -8,7 +8,7 @@
 # 테이블정의서
 * 테이블 정의서는 적재되는 로그를 담기위한 형식을 지정합니다
 * 아래는 테이블 정의서의 예제 입니다
-![Image of Dictionary](/Users/1002585/Desktop/table.png)
+![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/table_definition.png)
 * Header & Body 모델
  * Header는 모든 로그에 남는 정보를 기입합니다
  * Body는 로그의 문맥에 따라 달라지는 데이터의 종류를 기술 합니다
