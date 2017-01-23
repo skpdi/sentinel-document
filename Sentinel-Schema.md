@@ -7,8 +7,24 @@
 
 # 테이블정의서
 * 테이블 정의서는 적재되는 로그를 담기위한 형식을 지정합니다
-* 아래는 테이블 정의서의 예제 입니다
-![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/table_definition.png)
+* 아래는 테이블 정의서의 예제 입니다<br />
+
+  | 로그키 | 구분 | 이름 | 타입 | 설명 | 빈값가능 | 암호화 | 자동수집 | 검증룰 | 파라미터 |
+  |------|-----|-----|-----|-----|-------|------|--------|------|--------|
+  | | header | log_time | string | 로그시간 | true | false | x | datetime | YYYYMMDDHHmmssSSS |
+  | | header | log_vision | string | 로그 버전(정의서) | false | false | v | | |
+  | | header | hostname | string | 로그전송 서버 | false | false | x | | |
+  | v | header | action | string | 로그 ID,액션지정 | false | false | x | | |
+  | | header | level | string | 로그 레벨 | false | false | x | code | action |
+  | | header | session | string | 브라우저 세션 | true | false | x | | |
+  | | header | user | string | 행동 수행자 | true | false | x | | |
+  | | header | resource | string | 영향받는 리소스 | true | false | x | | |
+  | | header | verb | string | HTTP Method | false | false | x | | |
+  | | header | url | string | 요청 URL | true | false | x | | |
+  | | header | res_status | int | HTTP 응답 상태코드 | false | false | x | | |
+  | | body | res_message | string | human readable message | true | false | x | | |
+
+
 * Header & Body 모델
  * Header는 모든 로그에 남는 정보를 기입합니다
  * Body는 로그의 문맥에 따라 달라지는 데이터의 종류를 기술 합니다
