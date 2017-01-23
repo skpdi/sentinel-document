@@ -23,6 +23,8 @@
   | | header | url | string | 요청 URL | true | false | x | | |
   | | header | res_status | int | HTTP 응답 상태코드 | false | false | x | | |
   | | body | res_message | string | human readable message | true | false | x | | |
+  | | body | resource_id | string | 요청 리소스 식별자 | true | false | x | | |
+  | | body | resource_body | string | 요청 리소스 내용 | true | false | x | | |
 
 
 * Header & Body 모델
@@ -31,7 +33,7 @@
  * 로그가 입수되기 시작하면 Body는 변경 가능하지만 Header 정보는 추가, 삭제 및 변경이 불가능합니다
 * 테이블 정의서에서 구분이 Header인 한줄의 행은 하이브 테이블 1개의 컬럼에 연결됩니다
 * 테이블 정의서에서 구분이 Body인 전체는 하이브테이블 1개의 컬럼에 연결되고 데이터는 JSON의 형식을 갖습니다
-* 예제를 보면 Header는 9행, Body는 3행으로 구성되어있기 때문에 하이브 테이블은 총 10개의 컬럼을 갖게 됩니다
+* 예제를 보면 Header는 11행, Body는 3행으로 구성되어있기 때문에 하이브 테이블은 총 12개의 컬럼을 갖게 됩니다
 * 하이브에서 JSON 컬럼을 조회하기 위해서 [get_json_object UDF](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF#LanguageManualUDF-get_json_object) 를 사용합니다
 
 # 테이블정의서 - 용어설명
