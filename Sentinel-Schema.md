@@ -50,6 +50,7 @@
 # 코드정의서
 * key, value, description 으로 정의합니다
 * 주로 배치정의서에서 page\_id, action\_id 의 내용이 정상적으로 입력되었는지 검증하기위해 사용됩니다<br />
+
   | key | value | description |
   |-----|-------|-------------|
   | page_id | /search_product | 상품검색 페이지 |
