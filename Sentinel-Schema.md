@@ -28,20 +28,21 @@
 * 암호화 - 암호화가 필요한지 아닌지를 결정합니다. 유저의 개인정보가 포함된 경우라면 반드시 암호화를 해야합니다
 * 자동수집 - Rake를 이용할 경우 자동으로 수집되는 필드인지를 나타냅니다. 개발자가 별다른 설정을 하지 않아도 자동으로 해당 값이 입력되어 수집됩니다
 * 검증룰 - 원하는 데이터 형식으로 수집이 되고있는지 검증단계에서 확인할 수 있도록 검증규칙을 설정합니다
- * ip - 127.0.0.1 같은 IP 형식인지를 검증합니다
- * url - http://naver.com 같은 웹 URL 형식인지를 검증합니다
- * mdn - 010-1234-5678 같은 MDN 형식인지를 검증합니다
- * resolution - 1920\*1024 같은 화면해상도 형식인지를 검증합니다
- * datetime - 20170119174753292 같은 시간 형식인지를 검증합니다
- * code - 코드정의서에 지정된 코드인지를 검증합니다
- * regex - 정규식을 사용하여 검증합니다. 개발자가 사용합니다
- * function - Javascript 함수를 사용하여 검증합니다. 개발자가 사용합니다
+  * ip - 127.0.0.1 같은 IP 형식인지를 검증합니다
+  * url - http://naver.com 같은 웹 URL 형식인지를 검증합니다
+  * mdn - 010-1234-5678 같은 MDN 형식인지를 검증합니다
+  * resolution - 1920\*1024 같은 화면해상도 형식인지를 검증합니다
+  * datetime - 20170119174753292 같은 시간 형식인지를 검증합니다
+  * code - 코드정의서에 지정된 코드인지를 검증합니다
+  * regex - 정규식을 사용하여 검증합니다. 개발자가 사용합니다
+  * function - Javascript 함수를 사용하여 검증합니다. 개발자가 사용합니다
 
 # 배치정의서
 * 테이블정의서에서 선틱된 로그키를 이용하여 로그의 문맥에 따라 남게될 Body를 기술합니다<br />
- | page_id | action_id | | | | |
- |---------|-----------|---|---|---|---|---|---|
- | search_product | search_btn_touch | query | sort_by | page_num | per_page |
+
+  | page_id | action_id | | | | |
+  |---------|-----------|---|---|---|---|---|---|
+  | search_product | search_btn_touch | query | sort_by | page_num | per_page |
 
 
 * /search\_product 페이지의 search\_btn\_touch 액션을 했을때 검색어, 정렬옵션, 페이지번호, 한페이지당 보여지는 아이템수가 필요하다는 것을 알 수 있습니다
@@ -49,10 +50,10 @@
 # 코드정의서
 * key, value, description 으로 정의합니다
 * 주로 배치정의서에서 page\_id, action\_id 의 내용이 정상적으로 입력되었는지 검증하기위해 사용됩니다<br />
- | key | value | description |
- |-----|-------|-------------|
- | page_id | /search_product | 상품검색 페이지 |
- | action_id | search_btn_click | 상품 검색 아이콘 클릭 |
+  | key | value | description |
+  |-----|-------|-------------|
+  | page_id | /search_product | 상품검색 페이지 |
+  | action_id | search_btn_click | 상품 검색 아이콘 클릭 |
 
 * 예를 들어 위와같이 정의 했을 때 배치정의서는 action_id 에 search_btn_touch 로 정의했지만 코드정의서에는 search_btn_click 으로 정의 되었기 때문에 검증단계에서 오류가 발견됩니다.
 
