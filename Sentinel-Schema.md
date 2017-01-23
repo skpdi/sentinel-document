@@ -39,9 +39,8 @@
 
 # 배치정의서
 * 테이블정의서에서 선틱된 로그키를 이용하여 로그의 문맥에 따라 남게될 Body를 기술합니다<br />
-
  | page_id | action_id | | | | |
- |---------|-----------|-|-|-|-|-|-|
+ |---------|-----------|---|---|---|---|---|---|
  | search_product | search_btn_touch | query | sort_by | page_num | per_page |
 
 
@@ -50,7 +49,6 @@
 # 코드정의서
 * key, value, description 으로 정의합니다
 * 주로 배치정의서에서 page\_id, action\_id 의 내용이 정상적으로 입력되었는지 검증하기위해 사용됩니다<br />
-
  | key | value | description |
  |-----|-------|-------------|
  | page_id | /search_product | 상품검색 페이지 |
