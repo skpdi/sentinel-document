@@ -70,7 +70,7 @@ IP : 172.21.0.101~105 , PORT : 9092
     <dependency>
         <groupId>com.rake.rakeapi</groupId>
         <artifactId>rake-core</artifactId>
-        <version>0.2.0</version>
+        <version>0.3.0</version>
     </dependency>
 ...
 </dependencies>
@@ -99,7 +99,7 @@ repositories {
 }
 
 dependencies {
-    compile('com.rake.rakeapi:rake-core:0.2.0')
+    compile('com.rake.rakeapi:rake-core:0.3.0')
 }
 ~~~~
 
