@@ -246,3 +246,20 @@ RakeAPI는 Queue와 Sender 클래스를 동적으로 로딩합니다.
 동적 로딩 시 Queue또는 Sender 클래스를 찾지 못할 때 발생합니다.
 정상적으로 배포됐을 시 위 예외가 발생하지 않지만, 만일 ClassNotFoundException가 발생했다면 DI팀에 문의 하셔야 합니다.
 http://jira.skplanet.com/browse/DI/?selectedTab=com.atlassian.jira.jira-projects-plugin:summary-panel
+
+## Release Note
+* 0.1.9 Kafka New Producer 적용 및 안정화
+* 0.2.0 rakeapi monitoring로그 추가
+* 0.2.1 close 로직 발생시 flush추가 - 큐에 남아있던 로그 전부 전송 후 종료, Remain Sender tool 추가 - 파일큐를 읽어서 아직 안보낸 것 모두 보내는 Tool
+* 0.2.2 direct send 메서드 추가 - 파일 큐에 넣지 않고 바로 Kafka로 전송, Disk Usage 확인 메서드 추가
+* 0.2.3 모니터링 로그 File Path 버그 수정
+* 0.2.4 실수로 건너 뜀
+* 0.2.5 Remain Sender Tool 파일 구분 로직 추가
+* 0.2.6 File queue sanity check 및 복구 로직 추가
+* 0.2.7 json parsing 과정 제거, 기존 FileQueue에 넣기 위해 topic, value를 json으로 만들어 넣었다. 이 부분이 성능상 병목이 발생하여 제거하였다. Directory name을 토픽으로, parsing 없이 value를 queue에 넣는다. 서로 다른 Topic간의 전송은 Round Robin을 적용하여 전송한다.
+* 0.2.8 전송 실패 시 발생 버그 수정
+* 0.2.9 Rake Sender개발 RakeAPI -> Rake Server로 전송하는 API, SSL 전송 설정 추가
+* 0.3.0 SSL 설정 값이 안먹던 버그 해결
+* 0.3.1 default request max size 1mb -> 2mb로 변경 - 로그 한 건당 가능한 최대 메시지 바이트 수가 2mb
+* 0.3.2 11번가 Kafka로 전송하기 위한 설정 추가
+
