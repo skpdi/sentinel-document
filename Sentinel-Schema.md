@@ -1,144 +1,77 @@
-# OUT-DATED
-[신규 스키마 바로가기](https://github.com/skpdi/sentinel-document/blob/master/Sentinel-Schema_new.md)
+# 로그정의서 작성 매뉴얼
+* 로그정의서는 기획자, 개발자, 분석가들이 로그 데이터를 활용할 수 있도록 협업을 위한 도구를 제공합니다
+* 로그정의서는 크게 3개의 요소로 이루어져 있습니다
+ * 테이블정의서
+ * 배치정의서
+ * 코드정의서
 
-# Sentinel-Schema 설계문서 작성 manual
-* \#{tagName} 방식의 태그로 작성하여, Sentinel이 읽을 수 있는 형태로 제작
-* [Sample Schema 파일](https://docs.google.com/spreadsheets/d/1c54C-emSKnz95MnZ4RE7phEKcZ6cTF_4zuzBWChtWKQ/edit?usp=sharing) 참고
+# 테이블정의서
+* 테이블 정의서는 적재되는 로그를 담기위한 형식을 지정합니다
+* 아래는 테이블 정의서의 예제 입니다<br />
 
-## Sheet 정의
-* sentinel에서 사용되는 모든 sheet엔 태깅 필수, 아래 총 4개의 sheet가 사용됨
-* 모든 sheet의 시작 row와(\#start) 종료 row에(\#end) 태깅이 필요함
-* \#start 태그 바로 다음 row부터 각 sheet의 컨텐츠가 존재해야 함
-* \#end 태그 바로 직전 row까지 각 sheet의 컨텐츠가 존재해야 함
-
-#### 태그 예시(\#define)
-올바른 예시<br/>
-
-| | | | | |
-|-----|-----|-----|-----|-----|
-| | #start | | | |
-| |	#version	| #id	| #format |	| 
-| |	14.02.11	| T log sample |	HM	| |
-| |	#end |	| | |
-| | | | | |
-
-잘못된 예시
-> \#start 태그 바로 다음 row에 컨텐츠가 없음
-
-| | | | | |
-|-----|-----|-----|-----|-----|
-| | #start | | | |
-| | &nbsp; | | | |
-| |	#version	| #id	| #format |	| 
-| |	14.02.11	| T log sample |	HM	| |
-| |	#end |	| | |
-| | | | | |
- 
+  | 로그키 | 구분 | 이름 | 타입 | 설명 | 빈값가능 | 암호화 | 자동수집 | 검증룰 | 파라미터 |
+  |------|-----|-----|-----|-----|-------|------|--------|------|--------|
+  | | header | log_time | string | 로그시간 | true | false | x | datetime | YYYYMMDDHHmmssSSS |
+  | | header | log_vision | string | 로그 버전(정의서) | false | false | v | | |
+  | | header | hostname | string | 로그전송 서버 | false | false | x | | |
+  | v | header | action | string | 로그 ID,액션지정 | false | false | x | | |
+  | | header | level | string | 로그 레벨 | false | false | x | code | action |
+  | | header | session | string | 브라우저 세션 | true | false | x | | |
+  | | header | user | string | 행동 수행자 | true | false | x | | |
+  | | header | resource | string | 영향받는 리소스 | true | false | x | | |
+  | | header | verb | string | HTTP Method | false | false | x | | |
+  | | header | url | string | 요청 URL | true | false | x | | |
+  | | header | res_status | int | HTTP 응답 상태코드 | false | false | x | | |
+  | | body | res_message | string | human readable message | true | false | x | | |
+  | | body | resource_id | string | 요청 리소스 식별자 | true | false | x | | |
+  | | body | resource_body | string | 요청 리소스 내용 | true | false | x | | |
 
 
-## \#define
-스키마 문서의 기본 정보 정의
+* Header & Body 모델
+ * Header는 모든 로그에 남는 정보를 기입합니다
+ * Body는 로그의 문맥에 따라 달라지는 데이터의 종류를 기술 합니다
+ * 로그가 입수되기 시작하면 Body는 변경 가능하지만 Header 정보는 추가, 삭제 및 변경이 불가능합니다
+* 테이블 정의서에서 구분이 Header인 한줄의 행은 하이브 테이블 1개의 컬럼에 연결됩니다
+* 테이블 정의서에서 구분이 Body인 전체는 하이브테이블 1개의 컬럼에 연결되고 데이터는 JSON의 형식을 갖습니다
+* 예제를 보면 Header는 11행, Body는 3행으로 구성되어있기 때문에 하이브 테이블은 총 12개의 컬럼을 갖게 됩니다
+* 하이브에서 JSON 컬럼을 조회하기 위해서 [get_json_object UDF](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+UDF#LanguageManualUDF-get_json_object) 를 사용합니다
 
-![Image of Define](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_define.png?raw=true)
+# 테이블정의서 - 용어설명
+* 로그키 - 로그문맥을 구분할 수 있는 유일한값을 갖는 조합을 선택합니다. 일반적으로 page_id, action_id 조합이 사용됩니다
+* 구분 - 로든 로그에 남는 정보라면 Header, 로그키의 문맥에 따라 변경이 된다면 Body를 선택합니다
+* 이름 - 하이브 테이블의 컬럼이름을 기술합니다. 추후 HQL(Hive Query Language)에 사용됩니다
+* 타입 - 하이브 테이블 컬럼의 데이터타입을 기술합니다. 개발자에게 필요한 정보입니다
+* 설명 - 행이 나타내는 의미를 기술합니다. 이름으로는 모든것을 구분하기 어렵기 때문에 커뮤니케이션을 위해 충실히 적어주는것이 좋습니다
+* 빈값가능 - 해당 값이 반드시 입력되야 하는지 입력되지 않아도 되는지를 설정합니다. 추후 검증단계에서 의도적으로 값을 남기지 않은 것인지 실수한것인지 발견할 수 있습니다
+* 암호화 - 암호화가 필요한지 아닌지를 결정합니다. 유저의 개인정보가 포함된 경우라면 반드시 암호화를 해야합니다
+* 자동수집 - Rake를 이용할 경우 자동으로 수집되는 필드인지를 나타냅니다. 개발자가 별다른 설정을 하지 않아도 자동으로 해당 값이 입력되어 수집됩니다
+* 검증룰 - 원하는 데이터 형식으로 수집이 되고있는지 검증단계에서 확인할 수 있도록 검증규칙을 설정합니다
+  * ip - 127.0.0.1 같은 IP 형식인지를 검증합니다
+  * url - http://naver.com 같은 웹 URL 형식인지를 검증합니다
+  * mdn - 010-1234-5678 같은 MDN 형식인지를 검증합니다
+  * resolution - 1920\*1024 같은 화면해상도 형식인지를 검증합니다
+  * datetime - 20170119174753292 같은 시간 형식인지를 검증합니다
+  * code - 코드정의서에 지정된 코드인지를 검증합니다
+  * regex - 정규식을 사용하여 검증합니다. 개발자가 사용합니다
+  * function - Javascript 함수를 사용하여 검증합니다. 개발자가 사용합니다
 
-#### 사용 태그 목록
-* **\#start 태그** : 시작 row 정의
-* **\#end 태그** : 종료 row 정의
-* **\#version 태그** : 로그 버전 정의, 릴리즈 날짜형태(yy.mm.dd) 권장
-* **\#id 태그** : 로그 서비스명 정의
-* **\#format 태그** : "HM" (향후 확장성을 위한 태그)
+# 배치정의서
+* 테이블정의서에서 선틱된 로그키를 이용하여 로그의 문맥에 따라 남게될 Body를 기술합니다<br />
 
+   | page_id | action_id | | | | |
+   | --------|-----------|----------|----------|----------|---------|
+   | search_product | search_btn_touch | query | sort_by | page_num | per_page |
 
+* /search\_product 페이지의 search\_btn\_touch 액션을 했을때 검색어, 정렬옵션, 페이지번호, 한페이지당 보여지는 아이템수가 필요하다는 것을 알 수 있습니다
 
-## \#dictionary
-key 목록 정의, key 이름, 타입, 설명, 검증rule, 암호화여부 작성, 아래 나열되는 모든 태그가 존재하여야 함
+# 코드정의서
+* key, value, description 으로 정의합니다
+* 주로 배치정의서에서 page\_id, action\_id 의 내용이 정상적으로 입력되었는지 검증하기위해 사용됩니다<br />
 
-![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_dic.png?raw=true)
+  key | value | description
+  -----|-------|-------------
+  page_id | /search_product | 상품검색 페이지
+  action_id | search_btn_click | 상품 검색 아이콘 클릭
 
-#### 사용 태그 목록
-* **\#start 태그** : 시작 row 정의
-* **\#end 태그** : 종료 row 정의
-* **\#key 태그** : key 이름, human-readable하게 정의
-* **\#type 태그** : key type 
-  * string : 가변길이 문자형
-  * fixed string(n) : 고정길이 문자형, ex)fixed string(10) : 10자리 문자형
-  * int : 정수형
-  * float : 실수형
-  * list<type> : json list형, body에서만 사용 가능, 아래 3가지 type 이외의 type(list, object 등등)은 지원안함
-    * list<int> : 정수형 리스트, ex)[10,20,30]
-    * list<float> : 실수형 리스트, ex)[1.1,1.3,1.5]
-    * list<string> :  문자형 리스트,  ex)["a","b","c","d"]
-  * map<type> : json object 형, body에서만 사용 가능, 아래 3가지 type 이외의 type(list, object 등등)은 지원안함
-    * map<int> :  정수형 object,  ex){"a":10,"b":20,"c":30}
-    * map<float> : 실수형 object, ex){"a":1.1,"b":1.3,"c":1.5}
-    * map<string> :  문자형 object,  ex){"a":"q","b":"w","c":"e"}
-  * json : json, body에서만 사용 가능
-    * Body가 1depth 이기 때문에, 이 경우 2 depth 이상이 됩니다. json 의 depth가 2 이상인 값에 대해 암호화/검증기능을 지원하지 않습니다.
-* **\#description 태그** : key에 대한 설명
-* **\#rule 태그** : key의 검증룰, groovy 문법 채용, 모든 rule이 정의되어야 함(not nullable)
-  * bypass시(룰 검증이 필요없는 경우) : \#bypass 태그 입력
-  * UDF(user define function)
-    1. *dateformat(key, date_pattern)* : 시간관련 key 검증 
-      - example : dateformat(log_time, 'yyyyMMddHHmmssSSS')
-    2. *regex(key, regular_expression)* : 정규식 검증
-      - example : regex(log_version, '[0-9]{2}\\.[0-9]{2}\\.[0-9]{2}')
-    3. *list(key){value -> value 검증 룰}* : list type 검증, list 내의 모든 value를 차례대로 검증
-      - example : list(product_price){value -> value >= 0}<br/>
-        product_price의 type이 list<int>이고 value가 [10,20,30,40,50]인 경우<br/>
-        list내의 모든 value가 0 이상이어야 검증 통과
-    4. *map(key){key,value -> key,value에 대한 검증 룰}* : map type 검증, map 내의 모든 key, value를 차례대로 검증
-      - example : map(result_message){key,value -> key.length() >= 3 && value.length() > 0}<br/>
-        result_message의 type이 map<string>이고 value가 {"a01":"succ","b02":"fail"}인 경우<br/>
-        map내의 모든 key의 길이가 3 이상, 모든 value가 0보다 커야 검증 통과<br/>
-* **\#encryptionYN 태그** : key 저장시 암호화 여부, 암호화가 필요한 경우 Y 필요없으면 null
-* **\#version_key 태그** : log version을 정의하는 key, key 이름 뒤에 태깅, key 목록중에서 한 개의 version key가 필요(필수)
-
-
-## \#layout
-\#dictionary 에서 정의한 \#key를 활용해 header list 및 로그 종류별 body field 정의
-
-![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_header_body.png?raw=true)
-
-#### 로그 종류(action)에 대한 정의
-\#action 아래 action key로 사용할 key 정의<br/>
-두 개의 key 조합 설정 가능 <br/>
-- example: page_id:action_id 
-
-#### Header List 정의
-header는 모든 action에서 동일하게 입수할 값<br/>
-server log schema 작성시 header의 첫번째 값은 log_time(YYYYMMDDHH*)을 사용(입수 시스템에서 partition 분할에 사용)
-
-* action별 header 정의
-  - header key값을 입력한 경우 : 해당 key의 rule로 검증하겠음
-  - 비어있는 경우 : 해당 key를 사용하지 않겠음, 실제 로그엔 빈칸으로 기록되어야 함
-  - \#bypass 태그를 입력한 경우 : 해당 key엔 어떤 값이 들어와도 상관없음. 룰 검증을 하지 않겠음
-  - **header엔 list,map type의 \#key은 사용 불가**
-
-#### Body Field 정의
-로그 종류(action)별로 header list 외에 입수할 #key 나열
-
-
-#### 사용 태그 목록
-* **\#start 태그** : 시작 row 정의
-* **\#end 태그** : 종료 row 정의
-* **\#action 태그** : 액션명
-* **\#header 태그** : header시작 지점 정의
-* **\#body 태그** : body시작 지점 정의
-
-
-## code \#maplist
-validation rule에서 사용할 key-value data를 정의, code['key']으로 접근 가능<br/>
-MakeSentinel 시 key-value-description은 hive table로 export되어 다른 통계에 사용될 수 있음<br/>
-
-![Image of Dictionary](https://github.com/skpdi/sentinel-document/blob/master/schema/schema_code_map_list.png?raw=true)
-
-#### 사용 태그 목록
-* **\#start 태그** : 시작 row 정의
-* **\#end 태그** : 종료 row 정의
-* **\#key 태그** : key, 중복가능
-* **\#value 태그** : value, 동일 key에 대해서는 unique
-* **\#description 태그** : value에 대한 설명 작성
-
-
-
+* 예를 들어 위와같이 정의 했을 때 배치정의서는 action_id 에 search_btn_touch 로 정의했지만 코드정의서에는 search_btn_click 으로 정의 되었기 때문에 검증단계에서 오류가 발견됩니다.
 
