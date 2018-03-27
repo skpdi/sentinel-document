@@ -262,4 +262,5 @@ http://jira.skplanet.com/browse/DI/?selectedTab=com.atlassian.jira.jira-projects
 * 0.3.0 SSL 설정 값이 안먹던 버그 해결
 * 0.3.1 default request max size 1mb -> 2mb로 변경 - 로그 한 건당 가능한 최대 메시지 바이트 수가 2mb
 * 0.3.2 11번가 Kafka로 전송하기 위한 설정 추가
-
+* 0.3.3 Monitoring 로그에 Kafka Metrics 추가,Backup 전송 기능 추가
+* 0.3.4 Kafka Producer 버전 0.10.1.1 로 업그레이드
