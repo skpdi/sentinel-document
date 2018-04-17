@@ -1,11 +1,6 @@
-# RakeClient
-
-**Rake** 는 단말에서 서버로 로그를 *쉽고*, *안전하게* 전송할 수 있도록 도와주는 *가벼운* 라이브러리입니다. 
-
-Android / iOS / Javascript 지원
-
-
 ## Rake
+
+_Read this in other languages: [한국어](https://github.com/skpdi/rake-document/wiki/0.-Home-(%ED%95%9C%EA%B5%AD%EC%96%B4)), [English](https://github.com/skpdi/rake-document/wiki/0.-Home-(English))_
 
 <br/>
 
@@ -36,17 +31,18 @@ Rake는 단말 앱(Android, iOS) 이나 웹(WebApp, Hybrid)에서 로그를 전�
 
 <br/>
 
-### RakeClient API 사용 가이드
+### Rake Client 사용 가이드
 
 (1) Android
 
-[Rake Android API Usage](https://github.com/skpdi/rake-document/wiki/1.-Rake-Android)  
-[Rake Android Example Project](https://github.com/skpdi/rake-android-example)
+[Rake Android API Usage](https://github.com/skpdi/rake-document/wiki/1.-Rake-Android-(%ED%95%9C%EA%B5%AD%EC%96%B4))  
+[Rake Android Example Project](https://github.com/skpdi/rake-android/tree/master/rake_example)
 
 (2) iPhone
 
-[Rake iPhone API Usage](https://github.com/skpdi/rake-document/wiki/2.-Rake-iPhone)  
-[Rake iPhone Example Project](https://github.com/skpdi/rake-iphone-example)
+[Rake iPhone API Usage](https://github.com/skpdi/rake-document/wiki/2.-Rake-iPhone-(%ED%95%9C%EA%B5%AD%EC%96%B4))  
+[Rake iPhone Example Project(Objective-C)](https://github.com/skpdi/rake-iphone/tree/master/rake-iOS-example-Objc)   
+[Rake iPhone Example Project(Swift3)](https://github.com/skpdi/rake-iphone/tree/master/rake-iOS-example-Swift)
 
 (3) Web (Javascript)
 
@@ -101,11 +97,11 @@ Rake는 단말 앱(Android, iOS) 이나 웹(WebApp, Hybrid)에서 로그를 전�
 |App|language_code|string|언어 코드||
 |App|device_id|string|기기 고유 ID||
 |App|devic_model|string|기기 모델 명|SNM-4105|
-|Web|browser_name|string|단말 기준 서울 시각|20150716231055760|
-|Web|browser_version|string|단말 기준 서울 시각|20150716231055760|
-|Web|referrer|string|단말 기준 서울 시각|20150716231055760|
-|Web|url|string|단말 기준 서울 시각|20150716231055760|
-|Web|document_title|string|단말 기준 서울 시각|20150716231055760| 
+|Web|browser_name|string| 브라우저 이름 | |
+|Web|browser_version|string| 브라우저 버전 | |
+|Web|referrer|string| 이전 페이지 URL | |
+|Web|url|string| 현재 페이지 URL | |
+|Web|document_title|string| 현재 페이지 Title (주소창) | | 
 
 <br/>
 
@@ -120,6 +116,10 @@ Rake는 단말 앱(Android, iOS) 이나 웹(WebApp, Hybrid)에서 로그를 전�
 [참조 - Settings.Secure](http://developer.android.com/reference/android/provider/Settings.Secure.html#ANDROID_ID)
 
 디바이스 공장 초기화를 하면 값이 변경됩니다.
+
+참고로 Android O(8.0) 미만 버전에서는 기기별로 유니크한 값이었으나, O부터는 App별 유니크한 값으로 그 범위가 변경되었습니다.
+
+[참조 - Android O 동작변경사항 : 개인정보 보호정책](https://developer.android.com/preview/behavior-changes.html#privacy-all)
 
 2. iPhone
 
@@ -136,6 +136,25 @@ Vendor에 대해 기기별로 유니크한 값을 돌려줍니다. (e.g package 
 수집하지 않습니다.
 
 
+<br/>
+#### 4. 개발환경과 라이브환경은 어떻게 다른가요?
+
+짧게 요약하자면
+
+- 개발환경에서는 로그가 즉시 *flush* 됩니다.
+- 개발환경과 라이브환경용 토큰이 따로 있습니다. 따라서 배포시에는 라이브 토큰으로 세팅하셔야 합니다.
+- 개발환경 세팅과, 라이브환경 세팅이 다릅니다. 개발환경으로 세팅하면, 개발용 *end-point* 로 로그가 전송됩니다. 이 로그는 개발환경에서 발생한 로그이기 때문에 분석하지 않습니다. 반대로, 라이브환경으로 세팅하면, 라이브용 *end-point* 로 로그가 전송됩니다.
+
+**따라서 개발 환경으로 세팅하고, 앱을 마켓에 릴리즈하면 로그가 유실됩니다.**  
+**반대로 라이브환경으로 세팅하고, 개발을 진행하면 잘못된 로그가 실서버로 전송되어, 로그 분석 과정에서 매우 큰 오차가 발생할 수 있습니다.**
+  
+**반드시 토큰과 세팅을 릴리즈/개발용으로 맞추어 주세요.**
+
+#### 5. 이미지나, 바이너리로 큰 데이터를 보내는데, 전송되지 않는것 같아요. 
+
+- 현재 하나의 HTTP Request 당 1MB 제한이 있습니다. 따라서 이미지 등 큰 페이로드를 보낼 경우엔 매번 `flush()` 를 호출해주세요.
+
+<br/>
 <br/>
 #### 4. 개발환경과 라이브환경은 어떻게 다른가요?
 
