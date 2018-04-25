@@ -1,16 +1,21 @@
-# Sentinel Shuttle
+Sentinel Schema를 통해 정의된 규격대로 로그를 남길 수 있도록 Format 을 담당하는 라이브러리입니다.
+기록해야 하는 컬럼을 Setter 메소드를 이용해서 편리하게 남길 수 있습니다.
 
-Shuttle 은 로그의 포맷을 담당합니다. 정의된 로그의 설계도 대로, 기록해야 하는 컬럼을 Setter 메소드를 이용해서 편리하게 남길 수 있습니다.
+[센티넬 홈페이지](http://sentinel.skplanet.com:9090/)에서 다운 받을 수 있습니다. 
+Shuttle 은 포맷만 담당하며, 전송을 위해서는 [Rake](https://github.com/skpdi/rake-document/wiki)와 같이 사용해야 합니다.
 
-Shuttle 은 [센티넬 홈페이지](http://sentinel.skplanet.co.kr:8080/) 에서 다운받을 수 있습니다. 
-- 센티넬 프로젝트 구글시트 스키마 작성 후 
-- Sentinel 프로젝트 페이지에서 **Make Sentinel** 버튼을 클릭하여 생성된 Shuttle 을 다운받아 사용
-- Release 체크박스 해제 후에야 다운 버튼이 나타남
+- Client용 Shuttle (Java, Objective-C, JavaScript)
+- Server용 Shuttle (Java)
 
-Shuttle 은 포맷을 담당하고, 전송을 위해서는 Rake 를 사용해야 합니다. Rake 관련해서는 [Rake API Document](https://github.com/skpdi/rake-document/wiki) 를 참조해주세요.
+## 효과
+- 필드 이름 오타를 방지할 수 있습니다. (IDE 자동완성)
+- 필드 값 escaping 을 지원합니다. (\n, \r, 기타 이상한 아스키 코드등)
+- 필드 타입 불일치 방지 (Integer 가 필요한데, String 을 넣으면 컴파일이 되지 않습니다.)
+- 로그 버전 자동 생성
+- 로그버전 형식 : #define시트내의 #version : shuttle version : schema version (공백없이 ":"로 concat)
+- 로그 형식(JSON/TSV) 자동 생성
 
 ## 주의사항 - Client Shuttle 과 Server Shuttle 차이
-
 - Shuttle 은 스레드 세이프 하지 **않습니다**. 멀티 스레드 이슈가 있는 위치에서는 (e.g *Controller*) 매번 생성하거나, 무거울 경우 [ThreadLocal](https://docs.oracle.com/javase/7/docs/api/java/lang/ThreadLocal.html), Spring scope 등을 이용해주세요.
 - Client 용 Shuttle 은 Android, iOS, Javascript 버전을 지원하며, 의존성이 없습니다.
 - Server 용 Shuttle 은 Java 버전만 제공합니다. 의존성도 있으며, Shuttle.toString 을 사용해서 로깅합니다. (*toJSONObject* 가 아닙니다)
@@ -29,7 +34,7 @@ Shuttle 은 포맷을 담당하고, 전송을 위해서는 Rake 를 사용해야
 | Body Only     | map\<int\>                        | Map\<String, Long\> (*new LinkedHashMap\<String, Long\>*) | var | NSMutableDictionary* (*nil*) | |
 | Body Only     | map\<float\>                      | Map\<String, Double\> (*new LinkedHashMap\<String, Double\>*) | var | NSMutableDictionary (*nil*) | |
 | Body Only     | map\<string\>                     | Map\<String, String\> (*new LinkedHashMap\<String, String\>*) | var | NSMutableDictionary* (*nil*) | |
-| Body Only     | json                            | JSONObject (*null*) | var | NSString* (*nil*) | 암호화 및 검증 지원 불가 |
+| Body Only     | json                            | JSONObject (*null*) | var | NSMutableDictionary* (*nil*) | 암호화 및 검증 지원 불가 |
 
 <br/>
 
@@ -82,6 +87,8 @@ Android APK 난독화 시에는, Shuttle 을 난독화 대상에서 **반드시*
 #### 사용법
 Shuttle **jar** 파일을 클래스패스에 포함하고 아래처럼 사용할 수 있습니다. 
 
+- 서버용 Shuttle 의 경우 암호화 관련 의존성이 있습니다. [서버용 셔틀 사용법](http://wiki.skplanet.com/pages/viewpage.action?pageId=73762456) 페이지 참조 부탁드립니다. (내부망)
+
 ```java
 // 생성
 SampleSentinelShuttle shuttle = new SampleSentinelShuttle();
@@ -96,11 +103,20 @@ shuttle.setBodyOfMain_card_list__tap_my_card("2012-3XXX-XXXX-XXXX", null /* 값�
 
 // session_id 헤더 값을 기록하고, 나머지 Body 값을 setBodyOf 메소드를 이용해서 기록하는 경우
 shuttle.session_id("AF0EF").setBodyOfMain_card_list__tap_my_card("2012-3XXX-XXXX-XXXX", null ,"MM/YY");
+
+// Sentinel에서 `setBodyOf` 메소드를 사용하지 않음을 표기한 경우에는 `setBodyByJSonString` 메소드를 이용해 Body 값을 기록 할 수 있음
+// (!) 사용을 권장하지 않습니다.
+// 주의사항
+// - 세팅한 값이 올바른 JSon 형태의 String이 아니라면, JSonObject로 parsing이 되지 않아 `toJSonObject` 메소드 이용시 빈 body가 리턴 됨
+// - 정의하지 않은 key값을 넣어도 오류가 발생하지 않음
+// - body에 `set` 메소드를 사용 후 `setBodyByJSonString` 메소드를 이용하면 기존 `set` 메소드로 세팅한 Body 값이 사라짐
+// - `set` 메소드로 세팅 후 `setBodyByJSonString` 메소드를 이용하여 Body를 재 세팅하면 `set` 메소드로 세팅한 값을 `get` 메소드로 얻을 수는 있지만, toJSONObject() 메소드나, toString() 메소드 호출 시에는 `setBodyByJSonString`의 Body값만이 출력되게 됨.  
+shuttle.setBodyByJSonString("{\"auth_no\":\"A213213\",\"card_order\":1,"\"app_version\":\"2.3.1\"}");
 ```
 
 <br/>
 
-**Rake** 에 값을 기록한 Shuttle 을 넘겨주려면 다음처럼 사용합니다. ([Rake-Android API](https://github.com/skpdi/rake-document/wiki/1.-Rake-Android) 참고)
+**Rake** 에 값을 기록한 Shuttle 을 넘겨주려면 다음처럼 사용합니다. ([Rake-Android API](https://github.com/skpdi/rake-document/wiki/1.-Rake-Android-(%ED%95%9C%EA%B5%AD%EC%96%B4)) 참고)
 
 ```java
 // 서버용 셔틀은 `toJSONObject()` 가 아니라 `toString()` 을 호출해주세요. 
@@ -139,13 +155,22 @@ SampleSentinelShuttle *shuttle = [[SampleSentinelShuttle alloc] init];
 // setBodyOf 메소드를 이용하면, page_id, action_id 는 자동으로 기록됩니다. 이외의 Header 값은 직접 체이닝해서 사용해야 합니다.
 [shuttle setBodyOf_allcoupon_brand_brandcoupon__list_tap_coupon_with_brand_id:@"123123"];
 
+// Sentinel에서 `setBodyOf` 메소드를 사용하지 않음을 표기한 경우에는 `bodyByJSonString` 값을 세팅해 Body 값을 기록 할 수 있음
+// (!) 사용을 권장하지 않습니다.
+// 주의사항
+// - 세팅한 값이 올바른 JSon 형태의 NSString이 아니라면, `toString` 메소드나 `toNSDictionary` 메소드 이용시 JSonObject로 parsing이 되지 않아 빈 body가 리턴 됨 `{}`
+// - 정의하지 않은 key값을 넣어도 오류가 발생하지 않음
+// - body에 `setter` 메소드를 사용 후 `bodyByJSonString setter` 메소드를 이용하면 기존 `setter` 메소드로 세팅한 Body 값이 사라짐
+// - `setter` 메소드로 세팅 후 `bodyByJSonString setter` 메소드를 이용하여 Body를 재 세팅하면 `setter` 메소드로 세팅한 값을 `getter` 메소드로 얻을 수는 있지만, `getImmutableJSONObject` 메소드나 호출 시에는 `bodyByJSonString`의 Body값 만이 출력되게 됨.
+[shuttle bodyByJSonString:@"{\"auth_no\":\"A213213\",\"card_order\":1,","\"app_version\":\"2.3.1\"}"];                     
+
 // clearBody 메소드를 이용해서, 값을 비울 수 있습니다.
 [shuttle clearBody];
 ```
 
 <br/>
 
-**Rake** 에 값을 기록한 Shuttle 을 넘겨주려면 다음처럼 사용합니다. ([Rake-iPhone API](https://github.com/skpdi/rake-document/wiki/2.-Rake-iPhone) 참고)
+**Rake** 에 값을 기록한 Shuttle 을 넘겨주려면 다음처럼 사용합니다. ([Rake-iPhone API](https://github.com/skpdi/rake-document/wiki/2.-Rake-iPhone-(%ED%95%9C%EA%B5%AD%EC%96%B4)) 참고)
 
 ```objective-c
 [rake track:[shuttle toNSDictionary]];
@@ -183,6 +208,14 @@ shuttle.setBodyOf_event_purchase__event_purchase("event_name","purchase_id", pur
 // setBodyOf 메소드는 Body 값을 기록하므로 추가적인 Header 값을 기록하기 위해서는 다음처럼 체이닝해서 사용합니다.
 shuttle.setSession_id("AFD0104").setBodyOf_event_purchase__event_purchase("event_name","purchase_id", purchase_amount);
 
+// Sentinel에서 `setBodyOf` 메소드를 사용하지 않음을 표기한 경우에는 `bodyByJSonString` 값을 세팅해 Body 값을 기록 할 수 있음
+// (!) 사용을 권장하지 않습니다.
+// 주의사항
+// - 세팅한 값이 올바른 JSon 형태의 string이 아니라면, `getImmutableJSONObject` 메소드 이용시 parsing이 되지 않아 빈 body가 리턴 됨
+// - 정의하지 않은 key값을 넣어도 오류가 발생하지 않음
+// - body에 `set` 메소드를 사용 후 `setBodyByJSonString` 메소드를 이용하면 기존 `set` 메소드로 세팅한 Body 값이 사라짐
+// - `set` 메소드로 세팅 후 `setBodyByJSonString` 메소드를 이용하여 Body를 재 세팅하면 `getImmutableJSONObject` 메소드 호출 시에는 `setBodyByJSonString`로 세팅한 Body 값 만이 출력되게 됨.  
+shuttle.setBodyByJSonString("{\"auth_no\":\"A213213\",\"card_order\":2,\"app_version\":\"2.3.1\"}");
 
 // clearBody 메소드를 이용해서, 값을 비울 수 있습니다.
 shuttle.clearBody();
@@ -190,8 +223,17 @@ shuttle.clearBody();
 
 <br/>
 
-**Rake** 에 값을 기록한 Shuttle 을 넘겨주려면 다음처럼 사용합니다. ([Rake-Web API](https://github.com/skpdi/rake-document/wiki/3.-Rake-Web) 참고)
+**Rake** 에 값을 기록한 Shuttle 을 넘겨주려면 다음처럼 사용합니다. ([Rake-Web API](https://github.com/skpdi/rake-document/wiki/3.-Rake-Web-(%ED%95%9C%EA%B5%AD%EC%96%B4)) 참고)
 
 ```javascript
 rake.track(shuttle.getImmutableJSONObject());
 ```
+
+## 관련페이지
+- [LogAgent 사용자를 위한 Shuttle 포맷 가이드](http://wiki.skplanet.com/pages/viewpage.action?pageId=73762119)
+- [Sentinel Shuttle Maintainer Guide](http://wiki.skplanet.com/display/DIT/Sentinel+Shuttle+Maintainer+Guide)
+- [Sentinel Shuttle에서 사용 가능한 타입,예약어,코드](http://wiki.skplanet.com/pages/viewpage.action?pageId=73792210)
+- [Server 용 Shuttle 사용법 - 암호화 의존성 추가](http://wiki.skplanet.com/pages/viewpage.action?pageId=73762456)
+
+
+
