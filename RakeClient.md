@@ -46,7 +46,7 @@ Rake는 단말 앱(Android, iOS) 이나 웹(WebApp, Hybrid)에서 로그를 전�
 
 (3) Web (Javascript)
 
-[Rake Web API Usage](https://github.com/skpdi/rake-document/wiki/3.-Rake-Web)  
+[Rake Web API Usage](https://github.com/skpdi/rake-document/wiki/3.-Rake-Web-(%ED%95%9C%EA%B5%AD%EC%96%B4))  
 [Rake Web Example Project](https://github.com/skpdi/rake-web/tree/master/example)
 
 <br/>
